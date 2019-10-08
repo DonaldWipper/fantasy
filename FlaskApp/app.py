@@ -18,7 +18,7 @@ app.config['TEMPLATES_AUTO_RELOAD']=True
 
 
 def render(res):
-    return render_template("log.html", res2 = ' '.join(res))  
+    return render_template("log.html", res2 = res)  
 
 
 #get settings
