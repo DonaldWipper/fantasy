@@ -1,0 +1,125 @@
+{
+  "fantasy_settings": {
+    "login": "d.utiralov@gmail.com",
+    "url_login": "https://sports.ru/login",
+    "password": "41cda56553",
+    "tounaments": {
+      "PL": {
+        "team_id": 2150635,
+        "tournament_id": 52,
+        "season_id": 7380,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      },
+      "RPL": {
+        "team_id": 2104286,
+        "tournament_id": 31,
+        "season_id": 7371,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      },
+      "CL": {
+        "team_id": 2179415,
+        "tournament_id": 57,
+        "season_id": 6855,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      },
+      "бундеслига Германия": {
+        "team_id": 2194810,
+        "tournament_id": 50,
+        "season_id": 7390,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      },
+      "Ла Лига": {
+        "team_id": 2194809,
+        "tournament_id": 49,
+        "season_id": 7393,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      },  
+      "серия А Италия": {
+        "team_id": 2194811,
+        "tournament_id": 48,
+        "season_id": 7471,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      },  
+      "лига 1 Франция": {
+        "team_id": 2194812,
+        "tournament_id": 51,
+        "season_id": 7383,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      }, 
+       "высшая лига Голландия": {
+        "team_id": 2194813,
+        "tournament_id": 54,
+        "season_id": 7413,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      },   
+     "чемпионшип": {
+        "team_id": 2194814,
+        "tournament_id": 205,
+        "season_id": 7381,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      },   
+      "высшая лига Португалия": {
+        "team_id": 2194815,
+        "tournament_id": 207,
+        "season_id": 7397,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      }, 
+      "высшая лига Турция": {
+        "team_id": 2194816,
+        "tournament_id": 246,
+        "season_id": 7465,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      },   
+      "Лига европы": {
+        "team_id": 2194693,
+        "tournament_id": 56,
+        "season_id": 7378,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      }  
+        
+    }
+  },
+  "sport_api": {
+    "url_save": "https://www.sports.ru/fantasy/football/team/json/save/%d.json",
+    "url_get": "https://www.sports.ru/fantasy/football/team/json/%d.json",
+    "url_fantasy_menu": "https://www.sports.ru/api/user_fantasy_menu.json",  
+    "url_fantasy": "https://www.sports.ru/fantasy",  
+    "url_tournaments": "https://www.sports.ru/fantasy/football/team/create/%d.json",
+    "url_tournament_info": "https://www.sports.ru/stat/export/iphone/tournament_info.json",
+    "url_tournament_calendar": "https://www.sports.ru/stat/export/iphone/tournament_calendar.json",
+    "url_auth_mobile": "/ajax/user/authorization.html",
+    "url_player_stat": "https://www.sports.ru/stat/export/iphone/player_stat.json",
+    "url_player_info": "https://www.sports.ru/stat/export/iphone/playerinfo.json",
+    "url_team_players": "https://www.sports.ru/stat/export/iphone/teamplayers.json",
+    "url_team_stat_players": "https://www.sports.ru/stat/export/iphone/team_stat.json",
+    "url_tournament_all": "https://www.sports.ru/stat/export/iphone/all_tournaments.json",
+    "url_seasons": "https://www.sports.ru/stat/export/iphone/tournament_stat_seasons.json"
+  },
+  "headers": {
+    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept": "*/*",
+    "Host": "www.sports.ru",
+    "Origin": "https://www.sports.ru",
+    "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Pragma": "no-cache",
+    "Cookie": "suida=wKgBoVzjp4oxjlQEfGZzAg==; _ga=GA1.2.888964619.1558423441; _ym_uid=1558423443187817659; _ym_d=1558423443; __gfp_64b=fifGMOwGA2F0eyxgdAYD2Hp.VpA3o.7kxD1YeB9C1jn.K7; _lp4_u=M0FmsrGmig; __gads=ID=992839a8f2915086:T=1560430962:S=ALNI_MbpvO5KxzVYaL5DJ7Gvb3J6XAYhtA; _fbp=fb.1.1560430969044.136564941; rm_sid=da53c575e70cc9311c44f17125170a02; sid=da53c575e70cc9311c44f17125170a02; suid=f2b0f946-7213-41fa-85eb-62de243454ad; GED_PLAYLIST_ACTIVITY=W3sidSI6IlBFL1QiLCJ0c2wiOjE1NjY1Njk0MDYsIm52IjoxLCJ1cHQiOjE1NjY1Njk0MDUsImx0IjoxNTY2NTY5NDA1fV0.; _gid=GA1.2.1930405433.1566811316; _ym_isad=2; _fbc=fb.1.1566891712280.IwAR1BkLRW-L8L7jzE4IbGInLALUx9uipDjKkNrqZ4SRsagjyJBXDe--Sb2jE; _pk_ref.1.f56c=%5B%22%22%2C%22%22%2C1566898556%2C%22https%3A%2F%2Fwww.facebook.com%2F%22%5D; _pk_ses.1.f56c=*; _ym_visorc_6418777=w; _ym_visorc_28471=w; tmr_detect=0%7C1566898976756; _pk_id.1.f56c=0df356dcf59e8072.1558423442.69.1566899067.1566898556.; _dc_gtm_UA-42741470-1=1; _gat_UA-42741470-1=1",
+    "Connection": "keep-alive"
+      
+
+  }
+
+}
