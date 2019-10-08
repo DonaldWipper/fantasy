@@ -5,8 +5,8 @@ import numpy as np # linear algebra
 import pandas as pd
 import datetime
 import math
-import fantasy_logic
-import sport_api
+import FlaskApp.fantasy_logic
+import FlaskApp.sport_api
 from urllib.parse import parse_qs
 from datetime import date
 
