@@ -6,7 +6,7 @@ from flask import request, flash
 import json
 import requests
 import csv
-import FlaskApp.sport_fantasy
+import FlaskApp.sport_fantasy as sport_fantasy
 from datetime import date
 from datetime import datetime
 from flask import jsonify

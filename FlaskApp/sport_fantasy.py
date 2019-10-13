@@ -5,8 +5,8 @@ import numpy as np # linear algebra
 import pandas as pd
 import datetime
 import math
-import FlaskApp.fantasy_logic
-import FlaskApp.sport_api
+import FlaskApp.fantasy_logic as fantasy_logic
+import FlaskApp.sport_api as sport_api
 from urllib.parse import parse_qs
 from datetime import date
 
@@ -22,7 +22,7 @@ def read_params(fn):
     return d 
 
 def make_subs():
-    settings = read_params("settings.json")
+    settings = read_params("FlaskApp/settings.json")
     sports = sport_api.sportsApiMethods(settings)
     deadline_dict = {}
     fantasy_info = sports.getFantasyInfo()
