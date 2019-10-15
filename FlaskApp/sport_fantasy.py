@@ -45,7 +45,7 @@ def make_subs():
         team_id =  tournaments[tour] ['team_id']
         tournament_id =  tournaments[tour] ['tournament_id']
         season_id =  tournaments[tour] ['season_id']
-        if deadline_dict[team_id] != today_dd_mm:
+        if deadline_dict[team_id] != today_dd_mm and tournament_id != 246:
             log = 'Время замена для турнира %s %s еще не пришло. Сегодня %s' % (tour, deadline_dict[team_id], today_dd_mm) + '\n'
             print(log)   
             res.append(log)  
@@ -82,6 +82,7 @@ def make_subs():
                                      max_player_one_team = settings['fantasy_settings']["tounaments"][tour]['max_player_one_team'])
     
         df_transfers = f.getNewTeamAfterSubstitions(team_df, worst_players = worst, best_players = best_players)
+        res.append(str(df_transfers))
         f.sendTransfers(df_transfers)
     print(res)
     return res
