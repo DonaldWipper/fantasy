@@ -64,7 +64,7 @@ def make_subs():
             worst = f.getWorst(team = team_df, top = settings['fantasy_settings']["tounaments"][tour]['number_subs'])
             positions_worst = list(worst['amplua'])
             clubs_ids = list(worst['club_id'])
-            players_ids = list(team['id'])
+            players_ids = list(team_df['id'])
             sum_price = float(worst[['price']].sum())
             teams_limit_send =  f.playersInTeamLimit(team_df, club_ids = clubs_ids)
         else:
@@ -83,7 +83,8 @@ def make_subs():
     
         df_transfers = f.getNewTeamAfterSubstitions(team_df, worst_players = worst, best_players = best_players)
         res.append(str(df_transfers))
-        f.sendTransfers(df_transfers)
+        final = f.sendTransfers(df_transfers)
+        res.append(final) 
     print(res)
     return res
 

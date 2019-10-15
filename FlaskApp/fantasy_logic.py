@@ -1,6 +1,7 @@
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import datetime
 import math
+import time
 
 class sportsFantasyLogic():
     def __init__(self, _team_id, _tournament_id, _season_id, _sport_api):
@@ -112,7 +113,7 @@ class sportsFantasyLogic():
                 try:
                     res =  self.apiMethods.getPlayerStatSeason(tag, self.season_id, self.tournament_id)
                 except:
-                    time.sleep(secs)
+                    time.sleep(1)
                 player = pd.DataFrame(data =  res, index=[0])
                 if (player.iloc[0]['matches'] == 0):
                     del player
