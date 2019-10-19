@@ -21,17 +21,6 @@ def render(res):
     return render_template("log.html", res2 = res)  
 
 
-#get settings
-
-def read_params(fn): 
-    d ={} 
-    try:
-        with open(fn, 'r',encoding="utf-8") as file: 
-            d = json.load(file) 
-    except FileNotFoundError:
-         print ("Error. Can't find file " + fn)
-         d = {}
-    return d 
 
 
 

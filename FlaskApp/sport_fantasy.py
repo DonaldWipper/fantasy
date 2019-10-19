@@ -74,7 +74,7 @@ def make_subs():
             players_ids = []
             sum_price = 100
             worst = [1]
-            best_players = f.getBest(team = all_players_df, 
+        best_players = f.getBest(team = all_players_df, 
                                      positions = positions_worst, 
                                      sum_price = sum_price, 
                                      teamsLimit = teams_limit_send, 

@@ -146,9 +146,11 @@ class sportsApiMethods():
     def sendTransfers(self, transfers, team_id):
         session = requests.Session() 
         resp = session.post(self.settings['url_save']  % team_id, data = transfers, headers = self.headers)
-        print('team %d send %s' % (team_id, str(resp.json())) )
+        
         if resp.status_code != 200:
+            print('team %d send %s' % (team_id, str(resp.json())) )     
             return resp.json()
         else:
+            print('team %d send %s' % (team_id, resp.text))
             return {'status':'OK'} 
          
