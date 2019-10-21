@@ -19,7 +19,7 @@ class sportsFantasyLogic:
         self.players_df = pd.DataFrame()  # additional information about players
         self.cur_player_updated = 0
         self.players_dict = {}
-        self.num_threads = 10
+        self.num_threads = 20
         self.threads = []
         self.players_additional_fields = pd.DataFrame()
         self.sort_best_rules = {
