@@ -10,11 +10,12 @@ import FlaskApp.sport_fantasy as sport_fantasy
 from datetime import date
 from datetime import datetime
 from flask import jsonify
-from apscheduler.schedulers.blocking import BlockingScheduler
+
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['TEMPLATES_AUTO_RELOAD']=True
+
 
 
 def render(res):
@@ -22,9 +23,10 @@ def render(res):
 
 
 
+#sched.start()
 
 
-@sched.scheduled_job('interval', minutes=3)
+
 @app.route("/", methods=['GET'])
 def main():
     res = sport_fantasy.make_subs()

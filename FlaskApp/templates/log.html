@@ -13,11 +13,20 @@
 </head>
 
 <body>
-    <h1>
-    </h1>
-    
+  
+    <table>
+	{% for key in res2 %}
+	   <tr>
+		<th> {{ key }} </th>
+		<td> {{ res2[key]["status"] }} </td>
+	   </tr>
+	{% endfor %}
+    </table>
+
     {% for d in res2 %} 
-    <h> <font face="dusha"> {{d}} </font> </h1>
+    <h1>  {{d}} </h1>
+    <img src="/static/png/{{d}}.png" alt={{d}} width="500" height="333">
+
     <br>
     {% endfor %} 
 </body>

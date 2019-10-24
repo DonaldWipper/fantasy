@@ -1,25 +1,12 @@
-@font-face{
-font-family: octin;
-src: url('octin.ttf');
-font-weight: bold;}
-
-@font-face{
-font-family: quicksand-regular;
-src: url('Quicksand-Regular.otf');
-font-weight: bold;}
-
-@font-face{
-font-family: quicksand-bold;
-src: url('Quicksand-Bold.otf');
-font-weight: bold;}
 
 
 @font-face{
 font-family: dusha;
-src: url('dusha.ttf');
+src: url('SourceCodePro.ttf');
 }
 
 
-select {
-  font-family: dusha;
-}
+body {font-family: dusha; color:green}
+h1 {font-family:dusha; color: pink}
+
+

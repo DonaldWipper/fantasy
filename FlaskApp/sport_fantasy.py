@@ -43,20 +43,21 @@ def make_subs():
                                     login, 
                                     password) 
     teams = []
-    res = []
+    res = {}
     for tour in tournaments:
         team_id =  tournaments[tour] ['team_id']
         tournament_id =  tournaments[tour] ['tournament_id']
         season_id =  tournaments[tour] ['season_id']
+        
         if deadline_dict[team_id] != today_dd_mm and tournament_id != 246:
-            log = 'Время замена для турнира %s %s еще не пришло. Сегодня %s' % (tour, deadline_dict[team_id], today_dd_mm) + '\n'
-            print(log)   
-            res.append(log)  
+            log = 'Турнир %s: %s' % (deadline_dict[team_id], "время для замен еще не пришло") 
+            print(log) 
+            res[tour] = {"deadline":deadline_dict[team_id], "status":"время для замен еще не пришло"}  
             continue;
         else:
-            log = 'Делаю замены для турнира %s' % (tour) + '\n'
+            log = 'Турнир %s: %s' % (deadline_dict[team_id], "произведены замены") 
             print(log)
-            res.append(log) 
+            res[tour] = {"deadline":deadline_dict[team_id], "status":"произведены замены", "substitutions":""}  
         f = fantasy_logic.sportsFantasyLogic(team_id, tournament_id, season_id, sports)
         team_df = f.getMyFantasyTeam()
         team_df['is_inner_games'] = 1
@@ -85,9 +86,11 @@ def make_subs():
                                      max_player_one_team = settings['fantasy_settings']["tournaments"][tour]['max_player_one_team'])
     
         df_transfers = f.getNewTeamAfterSubstitions(team_df, worst_players = worst, best_players = best_players)
-        res.append( str(list(worst['name'])) + " => " + str(list(best_players['name'])) )
         final = f.sendTransfers(df_transfers)
-        res.append(final) 
+        res[tour]["status"] = final 
+        res[tour]["substitutions"] = str(list(worst['name'])) + " => " + str(list(best_players['name'])) 
+        df = pd.DataFrame.from_dict(res, orient="index") 
+        df.to_csv("FlaskApp/data.csv")
     print(res)
     return res
 
