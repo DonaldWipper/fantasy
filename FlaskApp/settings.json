@@ -91,6 +91,13 @@
         
     }
   },
+  "gitlab":{ 
+      "user":"DonaldWipper",
+      "password":"u1t2y3a4++++",
+      "fantasy":{ 
+         "project":"fantasy.git"
+      }
+   },
   "sport_api": {
     "url_team_info":"https://www.sports.ru/fantasy/football/team/%d.html",
     "url_points_tour":"https://www.sports.ru/fantasy/football/team/points/%d/%d.json",

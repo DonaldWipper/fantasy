@@ -1,7 +1,10 @@
 import requests
 from robobrowser import RoboBrowser
 import pandas as pd
-import  FlaskApp.parse_class as pc
+try:
+    import  FlaskApp.parse_class as pc
+except:
+    import  parse_class as pc
 #import  parse_class as pc
 
 class sportsApiMethods():
