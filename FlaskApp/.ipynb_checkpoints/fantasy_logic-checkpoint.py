@@ -1,5 +1,6 @@
 import pandas as pd  # data processing, CSV file I/O (e.g. pd.read_csv)
 import datetime
+import time
 import math
 from threading import Thread
 
@@ -19,12 +20,12 @@ class sportsFantasyLogic:
         self.players_df = pd.DataFrame()  # additional information about players
         self.cur_player_updated = 0
         self.players_dict = {}
-        self.num_threads = 10
+        self.num_threads = 20
         self.threads = []
         self.players_additional_fields = pd.DataFrame()
         self.sort_best_rules = {
             "is_injured": 1,
-            "is_inner_games": 0,
+            "is_inner_games": 1,
             "avg_season": 0,
             "avg_goals": 0,
             "avg_minutes": 0,
@@ -173,39 +174,7 @@ class sportsFantasyLogic:
         if len(self.players_df) == 0:
             self.players_df = pd.DataFrame()
 
-        """
-        for player_id in players:
-            #if self.cur_player_updated  == 4:
-            #    break;
-            status = self.df_all_players[self.df_all_players["id"] == player_id].iloc[0]["status"]
-            tag = self.df_all_players[self.df_all_players["id"] == player_id].iloc[0]["tag_id"]
-            name  = self.df_all_players[self.df_all_players["id"] == player_id].iloc[0]["name"]
-            #print('tag is %d, id is %s' % (tag, player_id))
-            if tag != 0 and  status == False:
-                try:
-                    res =  self.apiMethods.getPlayerStatSeason(tag, self.season_id, self.tournament_id)
-                except:
-                    time.sleep(secs)
-                player = pd.DataFrame(data =  res, index=[0])
-                if (player.iloc[0]['matches'] == 0):
-                    del player
-                    res =  self.apiMethods.getPlayerStatSeason(tag)
-                    player = pd.DataFrame(data =  res, index=[0])
-                    player['is_inner_games'] = 0
-                else:
-                    player['is_inner_games'] = 1
-                print('Updated player number %d, name %s, search inner %d' % (self.cur_player_updated, name, player['is_inner_games']))    
-                self.players_additional_fields = pd.concat([self.players_additional_fields, player])    
-                #self.players_df = pd.concat([self.players_df, player])
-            
-                #del player
-                self.df_all_players.loc[self.df_all_players['id'] ==player_id, 'status'] = True
-                self.cur_player_updated += 1   
-            elif tag == 0:  
-                print('Updated player number %d' % self.cur_player_updated)
-                self.df_all_players.loc[self.df_all_players['id'] ==player_id, 'status'] = True
-                self.cur_player_updated += 1
-        """
+
         players_chunk = separate_n(players, self.num_threads)
         for i in range(1, self.num_threads + 1):
             players_thread = players_chunk[i - 1]
@@ -214,7 +183,7 @@ class sportsFantasyLogic:
             print("start thread number %d" % i)
             t.start()
 
-        for i in range(1, self.num_threads + 1):
+        for i in range(0, self.num_threads):
             t.join()
 
         self.df_all_players = pd.merge(

@@ -5,8 +5,12 @@ from wtforms import Form, TextField, TextAreaField, validators, StringField, Sub
 from flask import request, flash
 import json
 import requests
+import pandas as pd
 import csv
-import FlaskApp.sport_fantasy as sport_fantasy
+try:
+    import FlaskApp.sport_fantasy as sport_fantasy
+except:
+    import sport_fantasy as sport_fantasy
 from datetime import date
 from datetime import datetime
 from flask import jsonify
@@ -22,16 +26,23 @@ def render(res):
     return render_template("log.html", res2 = res)  
 
 
+@app.route("/make_subs", methods=['GET'])
+def make_subs():
+    tournament_id = request.args.get('tournament_id')
+    res = sport_fantasy.make_subs(check=False,  _tournament_id = tournament_id)
+    return render(res)
 
 #sched.start()
 
 
 
+ 
 @app.route("/", methods=['GET'])
 def main():
-    res = sport_fantasy.make_subs()
+    res = sport_fantasy.make_subs() 
+    print(res)
     return render(res)
-    
+        
 
 if __name__ == "__main__":
     app.run(debug = True)
