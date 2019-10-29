@@ -22,15 +22,23 @@ app.config['TEMPLATES_AUTO_RELOAD']=True
 
 
 
-def render(res):
-    return render_template("log.html", res2 = res)  
+def render(res, lineup={}):
+    return render_template("log.html", res2 = res, lineup=lineup)  
 
 
 @app.route("/make_subs", methods=['GET'])
 def make_subs():
     tournament_id = request.args.get('tournament_id')
-    res = sport_fantasy.make_subs(tournament_id)
+    res = sport_fantasy.make_subs(check=False,  _tournament_id = tournament_id)
     return render(res)
+
+
+@app.route("/show_line_up", methods=['GET'])
+def show_line_up():
+    tournament_id = request.args.get('tournament_id')
+    lineup = sport_fantasy.get_myteam_json(_tournament_id = tournament_id)
+    res = sport_fantasy.make_subs()
+    return render(res,lineup)
 
 #sched.start()
 

@@ -10,6 +10,7 @@
 
 <body>
     <h1 style="text-align:center;font-family:dusha"> FANTASY AUTOMATION SYSTEM</h1>
+    
     <table border="1" style="font-family:dusha">
         {% for key in res2 %}
         <tr>
@@ -22,7 +23,27 @@
         </tr>
         {% endfor %}
     </table>
+    
+    <table border="1" style="font-family:dusha">
+        <tr>
+            {% for feature in lineup[0] %}
+                
+                <th> {{ feature }} </th>
+            {% endfor %}
 
+        </tr>
+        {% for key in lineup %}
+        
+        <tr>
+            {% for feature in lineup[key] %}
+                
+                <td> {{ lineup[key][feature] }} </td>
+            {% endfor %}
+
+        </tr>
+        {% endfor %}
+    </table>
+    
     <h2 style="text-align:center;font-family:dusha">Статистика набранных очков</h2>
     <td> <a href="update_statistics" class="button5" style="background-color:yellow;">Обновить статистику</a> </td>
     <div class="row">

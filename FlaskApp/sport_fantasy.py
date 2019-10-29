@@ -28,6 +28,31 @@ def read_params(fn):
         d = {}
     return d 
 
+def get_myteam_json(_tournament_id):
+    try:
+        settings = read_params("FlaskApp/settings.json")
+        sports = sport_api.sportsApiMethods(settings)
+    except:
+        settings = read_params("settings.json")
+        sports = sport_api.sportsApiMethods(settings)
+        
+    settings_fantasy = settings['fantasy_settings']    
+    tournaments = settings_fantasy["tournaments"]
+    tour = [tour for tour in tournaments if int(_tournament_id) == tournaments[tour] ['tournament_id']][0]
+    team_id =  tournaments[tour] ['team_id']
+    tournament_id =  tournaments[tour] ['tournament_id']
+    season_id =  tournaments[tour] ['season_id']
+    f = fantasy_logic.sportsFantasyLogic(team_id, tournament_id, season_id, sports)
+    team_df = f.getMyFantasyTeam()
+    team_df['is_inner_games'] = 1
+    team_df = team_df.sort_values(
+                    by=list(f.sort_best_rules.keys()),
+                    ascending=list(f.sort_best_rules.values()),
+                ).fillna(0).reset_index()
+        
+    return team_df.to_dict('index')
+
+        
 def make_subs(check=True, _tournament_id = None):
     #settings = read_params("settings.json")
     try:
