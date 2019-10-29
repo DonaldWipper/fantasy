@@ -9,7 +9,8 @@
 </head>
 
 <body>
-    <table border="1">
+    <h1 style="text-align:center;font-family:dusha"> FANTASY AUTOMATION SYSTEM</h1>
+    <table border="1" style="font-family:dusha">
         {% for key in res2 %}
         <tr>
             <th> {{ key["tournament"] }} </th>
@@ -17,11 +18,13 @@
             <td> {{ key["status"] }} </td>
             <td> {{ key["substitutions"] }} </td>
             <td> <a href="make_subs?tournament_id={{ key["tournament_id"] }}" class="button5" style="background-color:#42cc8c;">Сделать замены</a> </td>
+            <td> <a href="show_line_up?tournament_id={{ key["tournament_id"] }}" class="button6" style="background-color:yellow;">Показать состав</a> </td>
         </tr>
         {% endfor %}
     </table>
 
-    <h2 style="text-align:center">Статистика набранных очков</h2>
+    <h2 style="text-align:center;font-family:dusha">Статистика набранных очков</h2>
+    <td> <a href="update_statistics" class="button5" style="background-color:yellow;">Обновить статистику</a> </td>
     <div class="row">
         {% for d in res2 %}
         <div class="column">
@@ -36,7 +39,7 @@
 
                 <div class="mySlides">
                     <div class="numbertext"> {{loop.index}} / {{ res2|length }}</div>
-                    <img src="/static/png/{{d}}.png" style="width:100%">
+                    <img src="/static/png/{{d["tournament"]}}.png" style="width:100%">
                 </div>
                 {% endfor %}
 
