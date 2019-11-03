@@ -67,7 +67,7 @@ class sportsApiMethods():
         return season
 
     def getPlayerInfo(self, tag):
-        resp = requests.get(url_player_info + '?tag=%d' % (tag)) 
+        resp = requests.get(self.settings['url_player_info'] + '?tag=%d' % (tag)) 
         print(self.settings['url_player_info'] + '?tag=%d' % (tag))
         return resp.json() 
 

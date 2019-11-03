@@ -3,6 +3,8 @@ import datetime
 import time
 import math
 from threading import Thread
+import matplotlib.pyplot as plt
+import numpy as np
 
 def separate_n(data, n):
     m = math.ceil(len(data) / n)
@@ -20,7 +22,7 @@ class sportsFantasyLogic:
         self.players_df = pd.DataFrame()  # additional information about players
         self.cur_player_updated = 0
         self.players_dict = {}
-        self.num_threads = 20
+        self.num_threads = 3
         self.threads = []
         self.players_additional_fields = pd.DataFrame()
         self.sort_best_rules = {
@@ -99,7 +101,7 @@ class sportsFantasyLogic:
                         tag, self.season_id, self.tournament_id
                     )
                 except:
-                    time.sleep(secs)
+                    time.sleep(3)
                 player = pd.DataFrame(data=res, index=[0])
                 if player.iloc[0]["matches"] == 0:
                     del player
@@ -112,6 +114,8 @@ class sportsFantasyLogic:
                     "Updated player number %d, name %s, search inner %d, cur thread %d"
                     % (self.cur_player_updated, name, player["is_inner_games"], num_thread)
                 )
+                
+                
                 self.players_additional_fields = pd.concat(
                     [self.players_additional_fields, player]
                 )
@@ -136,6 +140,7 @@ class sportsFantasyLogic:
             res = self.apiMethods.getPlayerStatSeason(
                 tag, self.season_id, self.tournament_id
             )
+            res["avatar"] = self.apiMethods.getPlayerInfo(tag)["avatar"]
             player = pd.DataFrame(data=res, index=[0])
             players_df = pd.concat([players_df, player])
 
@@ -209,7 +214,7 @@ class sportsFantasyLogic:
 
     def getWorst(self, team, top=None):
         ascending2 = [1 - v for v in self.sort_best_rules.values()]
-        res = team.sort_values(
+        res = team.fillna(0).sort_values(
             by=list(self.sort_best_rules.keys()), ascending=ascending2
         )
         if top == None:
@@ -335,7 +340,34 @@ class sportsFantasyLogic:
             )
         )
         return df_players
+    
 
+    def get_plot_statistics(self):
+        tours_stats = self.apiMethods.getMyTeamInfoAllTours(team_id = self.team_id).reset_index()
+        if len(tours_stats) == 0:
+            return    
+
+        tours_stats['points'] = tours_stats.apply(lambda x: str(x['points']).replace('-', '0'), axis=1)
+        tours_stats = tours_stats[tours_stats['row'] != '0']
+        tours_stats['points'] = tours_stats['points'].astype(int)
+        fig, ax1 = plt.subplots()
+        fig.set_size_inches(18, 10)
+        tours_stats.replace('-', '0').groupby('tour').agg({'points':'sum'}).plot(marker='X',markersize=12, ax = ax1)
+        ax1.set_ylim(0, 80)
+        ax1.set_xlim(1, 38)
+        start, end = ax1.get_xlim()
+        ax1.xaxis.set_ticks(np.arange(start, end, 1))
+        ax1.set_xticklabels([int(i) for i in np.arange(start, end + 1, 1)])
+        start, end = ax1.get_ylim()
+
+        #plt.xlim(0,10)
+        ax1.yaxis.set_ticks(np.arange(start, end, 10))
+        ax1.set_yticklabels([int(i) for i in np.arange(start, end + 10, 10)])
+        plt.xticks(rotation=30)
+        plt.title(key)
+        plt.grid(True)
+        plt.savefig('static/png/%s.png' % key)
+    
     def getNewTeamConcat(self, team, worst_players, best_players):
         team_new = team.copy()
         if len(team_new) > 1:

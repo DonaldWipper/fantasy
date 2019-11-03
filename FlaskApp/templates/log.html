@@ -16,7 +16,7 @@
         <tr>
             <th> {{ key["tournament"] }} </th>
             <td> {{ key["deadline"] }} </td>
-            <td> {{ key["status"] }} </td>
+            <td bgcolor="{{ key["color"] }}"> {{ key["status"] }} </td>
             <td> {{ key["substitutions"] }} </td>
             <td> <a href="make_subs?tournament_id={{ key["tournament_id"] }}" class="button5" style="background-color:#42cc8c;">Сделать замены</a> </td>
             <td> <a href="show_line_up?tournament_id={{ key["tournament_id"] }}" class="button6" style="background-color:yellow;">Показать состав</a> </td>
@@ -36,8 +36,11 @@
         
         <tr>
             {% for feature in lineup[key] %}
-                
-                <td> {{ lineup[key][feature] }} </td>
+                {% if ( '.png' in lineup[key][feature]|string) or ('.jpg' in lineup[key][feature]|string) or ('.jpeg' in lineup[key][feature]|string)  %}
+                    <td> <img src="{{ lineup[key][feature] }}" alt="" height=30 width=30>   </td>
+                {% else %}
+                    <td> {{ lineup[key][feature] }} </td>
+                {% endif %}
             {% endfor %}
 
         </tr>
