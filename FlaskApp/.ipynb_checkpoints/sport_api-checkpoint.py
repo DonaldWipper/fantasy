@@ -1,4 +1,5 @@
 import requests
+import json
 from robobrowser import RoboBrowser
 import pandas as pd
 try:
@@ -82,7 +83,7 @@ class sportsApiMethods():
             url =   self.settings['url_player_stat'] + '?tag=%d&season_id=%d&tournament_id=%d' % (tag, season_id, tournament_id)
         resp = requests.get(url) 
         #df = pd.DataFrame(data =  resp.json())
-        return resp.json()
+        return json.loads(resp.text)
 
     def getPlayerStatSeason(self, tag, season_id = None, tournament_id = None):
         resp = self.getPlayerStat(tag, season_id, tournament_id)
@@ -162,18 +163,44 @@ class sportsApiMethods():
         url = self.settings['url_team_stat_players'] + '?tag=%d' % (tag)
         print(url)
         resp = requests.get(url)
-        return resp.json()["players"]
- 
+        return json.loads(resp.text) ["players"]
+    
+    def getTeamPlayers2(self, tag):
+        url = self.settings['url_team_players'] + '?tag=%d' % (tag)
+        print(url)
+        resp = requests.get(url)
+        return json.loads(resp.text) 
+    
     def getPlayersDict(self,season_id, tournament_id, month, list_ids):
         players = {}
         teams = self.getTeamsTournament(season_id, tournament_id)
         print(teams)
         pls = []
         for team in teams:
-            pl =  self.getTeamPlayers(team)
+            try:
+                pl =  self.getTeamPlayers(team)
+            except:
+                print("error of loading players")
+                try:
+                    pl =  self.getTeamPlayers(team)
+                except:
+                    print("error of loading players") 
+            try:
+                pl2 =  self.getTeamPlayers2(team)
+            except:
+                print("error of loading players")
+                try:
+                    pl2 =  self.getTeamPlayers2(team)
+                except:
+                    print("error of loading players")
+                    
+            
             for p in pl:
                 if p['id'] in list_ids:
-                    players[p['id']] = p['tag_id']     
+                    players[p['id']] = p['tag_id']
+            for p in pl2:
+                if p['player_id'] in list_ids and p['player_id'] not in players:
+                    players[p['player_id']] = p['tag_id']         
         return players 
     
     def sendTransfers(self, transfers, team_id):

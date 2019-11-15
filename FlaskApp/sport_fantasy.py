@@ -28,6 +28,48 @@ def read_params(fn):
         d = {}
     return d 
 
+def update_plot_statictics(_tournament_id = None):
+    try:
+        settings = read_params("FlaskApp/settings.json")
+        sports = sport_api.sportsApiMethods(settings)
+    except:
+        settings = read_params("settings.json")
+        sports = sport_api.sportsApiMethods(settings)
+        
+    settings_fantasy = settings['fantasy_settings']     
+    tournaments = settings_fantasy["tournaments"]
+    for tour in tournaments:
+        team_id =  tournaments[tour] ['team_id']
+        tournament_id =  tournaments[tour] ['tournament_id']
+        season_id =  tournaments[tour] ['season_id']
+        f = fantasy_logic.sportsFantasyLogic(team_id, tournament_id, season_id, sports, tour)
+        f.get_plot_statistics()
+
+def make_substitutions(_tournament_id = None):
+    try:
+        settings = read_params("FlaskApp/settings.json")
+        sports = sport_api.sportsApiMethods(settings)
+    except:
+        settings = read_params("settings.json")
+        sports = sport_api.sportsApiMethods(settings)
+    settings_fantasy = settings['fantasy_settings']    
+    tournaments = settings_fantasy["tournaments"]
+    tour = [tour for tour in tournaments if int(_tournament_id) == tournaments[tour] ['tournament_id']][0]
+    team_id =  tournaments[tour] ['team_id']
+    tournament_id =  tournaments[tour] ['tournament_id']
+    season_id =  tournaments[tour] ['season_id']
+    f = fantasy_logic.sportsFantasyLogic(team_id, tournament_id, season_id, sports)    
+    team_df = f.getMyFantasyTeam()
+    team_df['is_inner_games'] = 1
+    team_df = team_df.sort_values(
+                    by=list(f.sort_best_rules.keys()),
+                    ascending=list(f.sort_best_rules.values()),
+                ).fillna(0).reset_index()
+    positions = team_df[team_df['row'] > '0'].groupby(['amplua'])['amplua'].count().to_dict() 
+    final = f.sendTransfers(team_df, positions)
+    return final
+        
+    
 def get_myteam_json(_tournament_id):
     try:
         settings = read_params("FlaskApp/settings.json")
@@ -72,7 +114,7 @@ def get_myteam_json(_tournament_id):
     columns_list = order_columns + [c for c in team_df.columns if c not in order_columns]               
     team_df = team_df[columns_list].drop(columns = columns)
     team_df = team_df.loc[:, (team_df != 0).any(axis=0)]
-    team_df = team_df.round({'avg_minutes':2, 'avg_season':2, 'avg_goals':2})
+    team_df = team_df.round({'avg_minutes':2, 'avg_season':2, 'avg_goals':2, 'avg_goal_passes':2})
     return team_df.to_dict('index')
 
 def get_color_by_state(status):
@@ -86,7 +128,7 @@ def get_color_by_state(status):
         return 'red'
     
         
-def make_subs(check=True, _tournament_id = None):
+def make_transfers(check=True, _tournament_id = None):
     #settings = read_params("settings.json")
     try:
         settings = read_params("FlaskApp/settings.json")
@@ -138,7 +180,7 @@ def make_subs(check=True, _tournament_id = None):
         print(str(dict_last_try[int(tournament_id)][0]) == deadline_dict[team_id])
         if int(tournament_id) in dict_last_try and str(dict_last_try[int(tournament_id)][0]).zfill(5) == deadline_dict[team_id]:
             print('inside sfsg')
-            if dict_last_try[tournament_id][1] in [1, -1]:
+            if dict_last_try[tournament_id][1] in [1]:
                 #r["status"] = dict_last_try[tournament_id][1]
                 r["status"] = dict_last_try[tournament_id][3]
                 r["substitutions"] = dict_last_try[tournament_id][2]
@@ -178,6 +220,7 @@ def make_subs(check=True, _tournament_id = None):
         if len(team_df) > 10:
             worst = f.getWorst(team = team_df, top = settings['fantasy_settings']["tournaments"][tour]['number_subs'])
             positions_worst = list(worst['amplua'])
+            positions = team_df[team_df['row'] > '0'].groupby(['amplua'])['amplua'].count().to_dict() 
             clubs_ids = list(worst['club_id'])
             players_ids = list(team_df['id'])
             sum_price = 100 - team_df.sum()['price'] + float(worst[['price']].sum())
@@ -185,6 +228,7 @@ def make_subs(check=True, _tournament_id = None):
         else:
             team_df = pd.DataFrame()
             positions_worst = [1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 3, 2, 2, 1]
+            positions = {1: 1, 2: 3, 3: 4, 4: 2}
             teams_limit_send = {}
             players_ids = []
             sum_price = 100
@@ -197,7 +241,7 @@ def make_subs(check=True, _tournament_id = None):
                                      max_player_one_team = settings['fantasy_settings']["tournaments"][tour]['max_player_one_team'])
         
         df_transfers = f.getNewTeamAfterSubstitions(team_df, worst_players = worst, best_players = best_players)
-        final = f.sendTransfers(df_transfers)
+        final = f.sendTransfers(df_transfers, positions)
         r["status"] = final
         if str(final).lower().find('ok') > -1:
             r["status_result"] = 1

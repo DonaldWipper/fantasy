@@ -7,9 +7,20 @@
         <!-- Month names -->
 
 </head>
-
+<script type="text/javascript">
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+           'size': 'invisible',
+           'isolated': !0,
+           'sitekey' : '6LfctWkUAAAAAA0IBo4Q7wlWetU0jcVC7v5BXbFT'
+        });
+      };
+    </script>
+    
 <body>
     <h1 style="text-align:center;font-family:dusha"> FANTASY AUTOMATION SYSTEM</h1>
+    
+
     
     <table border="1" style="font-family:dusha">
         {% for key in res2 %}
@@ -18,12 +29,14 @@
             <td> {{ key["deadline"] }} </td>
             <td bgcolor="{{ key["color"] }}"> {{ key["status"] }} </td>
             <td> {{ key["substitutions"] }} </td>
-            <td> <a href="make_subs?tournament_id={{ key["tournament_id"] }}" class="button5" style="background-color:#42cc8c;">Сделать замены</a> </td>
             <td> <a href="show_line_up?tournament_id={{ key["tournament_id"] }}" class="button6" style="background-color:yellow;">Показать состав</a> </td>
+            <td> <a href="make_transfers?tournament_id={{ key["tournament_id"] }}" class="button5" style="background-color:#42cc8c;">Сделать трансферы</a> </td>
+            <td> <a href="make_substitutions?tournament_id={{ key["tournament_id"] }}" class="button5" style="background-color:orange;">Сделать замены</a> </td>
+            
         </tr>
         {% endfor %}
     </table>
-    
+    <br>
     <table border="1" style="font-family:dusha">
         <tr>
             {% for feature in lineup[0] %}
@@ -81,9 +94,29 @@
 
             </div>
         </div>
+        
+<form>
+      <div id="html_element"></div>
+      <br>
+      <input type="submit" value="Submit" onclick="changeValue(this.id)">
+</form>
+        
 </body>
+    
+    
+    
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+    async defer>
+</script>
 
 <script>
+    function changeValue(id) {
+        var el       = document.getElementById(id);
+        //el.value     = grecaptcha.getResponse("html_element");  // change the value passed to the next page
+        el.innerHTML = grecaptcha.getResponse("html_element");  // change the displayed text on the screen
+    return false;
+    }
+    
     function openModal() {
         document.getElementById("myModal").style.display = "block";
     }

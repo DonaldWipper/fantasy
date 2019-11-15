@@ -2,7 +2,7 @@
   "fantasy_settings": {
     "login": "d.utiralov@gmail.com",
     "url_login": "https://sports.ru/login",
-    "password": "41cda56553",
+    "password": "f9c0951393",
     "tournaments": {
       "премьер-лига Англия": {
         "team_id": 2150635,
@@ -108,7 +108,8 @@
     "url_tournaments": "https://www.sports.ru/fantasy/football/team/create/%d.json",
     "url_tournament_info": "https://www.sports.ru/stat/export/iphone/tournament_info.json",
     "url_tournament_calendar": "https://www.sports.ru/stat/export/iphone/tournament_calendar.json",
-    "url_auth_mobile": "/ajax/user/authorization.html",
+    "url_auth": "https://www.sports.ru/core/user/authorize/",
+    "url_auth_mobile": "https://www.sports.ru/ajax/user/authorization.html",
     "url_player_stat": "https://www.sports.ru/stat/export/iphone/player_stat.json",
     "url_player_info": "https://www.sports.ru/stat/export/iphone/playerinfo.json",
     "url_team_players": "https://www.sports.ru/stat/export/iphone/teamplayers.json",
@@ -122,10 +123,10 @@
     "Accept": "*/*",
     "Host": "www.sports.ru",
     "Origin": "https://www.sports.ru",
-    "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36",
     "Accept-Language": "en-US,en;q=0.9",
     "Pragma": "no-cache",
-    "Cookie": "suida=wKgBoVzjp4oxjlQEfGZzAg==; _ga=GA1.2.888964619.1558423441; _ym_uid=1558423443187817659; _ym_d=1558423443; __gfp_64b=fifGMOwGA2F0eyxgdAYD2Hp.VpA3o.7kxD1YeB9C1jn.K7; _lp4_u=M0FmsrGmig; __gads=ID=992839a8f2915086:T=1560430962:S=ALNI_MbpvO5KxzVYaL5DJ7Gvb3J6XAYhtA; _fbp=fb.1.1560430969044.136564941; rm_sid=da53c575e70cc9311c44f17125170a02; sid=da53c575e70cc9311c44f17125170a02; suid=f2b0f946-7213-41fa-85eb-62de243454ad; GED_PLAYLIST_ACTIVITY=W3sidSI6IlBFL1QiLCJ0c2wiOjE1NjY1Njk0MDYsIm52IjoxLCJ1cHQiOjE1NjY1Njk0MDUsImx0IjoxNTY2NTY5NDA1fV0.; _gid=GA1.2.1930405433.1566811316; _ym_isad=2; _fbc=fb.1.1566891712280.IwAR1BkLRW-L8L7jzE4IbGInLALUx9uipDjKkNrqZ4SRsagjyJBXDe--Sb2jE; _pk_ref.1.f56c=%5B%22%22%2C%22%22%2C1566898556%2C%22https%3A%2F%2Fwww.facebook.com%2F%22%5D; _pk_ses.1.f56c=*; _ym_visorc_6418777=w; _ym_visorc_28471=w; tmr_detect=0%7C1566898976756; _pk_id.1.f56c=0df356dcf59e8072.1558423442.69.1566899067.1566898556.; _dc_gtm_UA-42741470-1=1; _gat_UA-42741470-1=1",
+    "Cookie": "suida=JdHxyF2dgyYSsG+rAxyCAg==; _ym_uid=1570603815374310019; _ym_d=1570603815; __gads=ID=6e604e17b242cdcc:T=1570603815:S=ALNI_Mbe013xjBiQnHjX7hp5LYE1zlzPCw; _fbp=fb.1.1570603816042.2137681317; __gfp_64b=6bMmfAuh4JET45W8hFKg6D3gdRMzuvfxweTx_AA3CMb.m7; _lp4_u=BUujzaH23l; _gid=GA1.2.1315903212.1572595748; _fbc=fb.1.1572595748589.IwAR1tUfpwpPUpqRpDoJznBoOp0UMAxbJ8gs-tq1nNU9t60jyQ7Cg9-pU_4Zw; _ym_isad=2; _pk_ref.1.f56c=%5B%22%22%2C%22%22%2C1572971669%2C%22https%3A%2F%2Fwww.facebook.com%2F%22%5D; _pk_ses.1.f56c=*; _ym_visorc_6418777=w; _ym_visorc_28471=w; _dc_gtm_UA-42741470-1=1; _gat_UA-42741470-1=1; rm_sid=5d3a4943001bb6828fb37f7c3b4d78d6; sid=5d3a4943001bb6828fb37f7c3b4d78d6; suid=f2b0f946-7213-41fa-85eb-62de243454ad; _pk_id.1.f56c=082fc30402491a49.1570603815.65.1572971750.1572971669.; tmr_detect=0%7C1572971752201; _ga=GA1.1.114489237.1570603815; _ga_CEWMLN1YLP=GS1.1.1572971669.54.1.1572971759.43",
     "Connection": "keep-alive"
       
 

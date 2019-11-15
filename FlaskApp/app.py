@@ -26,10 +26,27 @@ def render(res, lineup={}):
     return render_template("log.html", res2 = res, lineup=lineup)  
 
 
-@app.route("/make_subs", methods=['GET'])
-def make_subs():
+
+@app.route("/update_statistics", methods=['GET'])
+def update_statistics():
     tournament_id = request.args.get('tournament_id')
-    res = sport_fantasy.make_subs(check=False,  _tournament_id = tournament_id)
+    sport_fantasy.update_plot_statictics()
+    res = sport_fantasy.make_transfers()
+    return render(res)
+
+@app.route("/make_substitutions", methods=['GET'])
+def make_substitutions():
+    tournament_id = request.args.get('tournament_id')
+    sport_fantasy.make_substitutions(_tournament_id = tournament_id)
+    lineup = sport_fantasy.get_myteam_json(_tournament_id = tournament_id)
+    res = sport_fantasy.make_transfers()
+    return render(res,lineup)
+
+
+@app.route("/make_transfers", methods=['GET'])
+def make_transfers():
+    tournament_id = request.args.get('tournament_id')
+    res = sport_fantasy.make_transfers(check=False,  _tournament_id = tournament_id)
     return render(res)
 
 
@@ -37,7 +54,7 @@ def make_subs():
 def show_line_up():
     tournament_id = request.args.get('tournament_id')
     lineup = sport_fantasy.get_myteam_json(_tournament_id = tournament_id)
-    res = sport_fantasy.make_subs()
+    res = sport_fantasy.make_transfers()
     return render(res,lineup)
 
 #sched.start()
@@ -47,7 +64,7 @@ def show_line_up():
  
 @app.route("/", methods=['GET'])
 def main():
-    res = sport_fantasy.make_subs() 
+    res = sport_fantasy.make_transfers() 
     print(res)
     return render(res)
         

@@ -5,6 +5,7 @@ import math
 from threading import Thread
 import matplotlib.pyplot as plt
 import numpy as np
+from numpy import inf
 
 def separate_n(data, n):
     m = math.ceil(len(data) / n)
@@ -13,23 +14,73 @@ def separate_n(data, n):
 
 
 class sportsFantasyLogic:
-    def __init__(self, _team_id, _tournament_id, _season_id, _sport_api):
+    def __init__(self, _team_id, _tournament_id, _season_id, _sport_api, _title = ""):
         self.apiMethods = _sport_api
         self.team_id = _team_id
         self.tournament_id = _tournament_id
         self.season_id = _season_id
         self.df_all_players = pd.DataFrame()  # general informations about players
         self.players_df = pd.DataFrame()  # additional information about players
+        self.title = _title
         self.cur_player_updated = 0
         self.players_dict = {}
-        self.num_threads = 3
+        self.num_threads = 10
         self.threads = []
         self.players_additional_fields = pd.DataFrame()
-        self.sort_best_rules = {
+        self.sort_rules = {  
+        1: {
+            #"is_inner_games": 0,
             "is_injured": 1,
-            "is_inner_games": 0,
+            "is_disqual":1,   
+            "matches": 0,  
+            "conceded_goals": 1,   
+            "avg_season": 0,
+            "matches": 0,   
+            "avg_minutes": 0
+        },
+        2: {
+            "is_injured": 1,
+            "is_disqual":1, 
+            #"is_inner_games": 0,
             "avg_season": 0,
             "avg_goals": 0,
+            "avg_goal_passes": 0,
+            "avg_minutes": 0,
+            "matches": 0,
+            "conceded_goals": 1,
+        }, 
+        3: {
+            "is_injured": 1,
+            "is_disqual":1, 
+            #"is_inner_games": 0,
+            "avg_season": 0,
+            "avg_goals": 0,
+            "avg_goal_passes": 0,
+            "avg_minutes": 0,
+            "matches": 0,
+            "conceded_goals": 1,
+        },
+        4: {
+            "is_injured": 1,
+            "is_disqual":1, 
+            #"is_inner_games": 0,
+            "avg_season": 0,
+            "avg_goals": 0,
+            "avg_goal_passes": 0,
+            "avg_minutes": 0,
+            "matches": 0,
+            "conceded_goals": 1,
+        }
+            
+            
+        }    
+        
+        self.sort_best_rules = {
+            "is_injured": 1,
+            #"is_inner_games": 0,
+            "avg_season": 0,
+            "avg_goals": 0,
+            "avg_goal_passes": 0,
             "avg_minutes": 0,
             "matches": 0,
             "conceded_goals": 1,
@@ -47,10 +98,10 @@ class sportsFantasyLogic:
                 team[field] = team[field].apply(pd.to_numeric)
         team["id"] = team["id"].astype(int)
         team["amplua"] = team["amplua"].astype(int)
-        fields_avg = ["minutes", "season", "goals", "conceded_goals"]
+        fields_avg = ["minutes", "season", "goals", "conceded_goals", "goal_passes"]
         for field in fields_avg:
             if field in team:
-                team["avg_" + field] = team[field] / team["matches"]
+                team["avg_" + field] = team.apply(lambda x: 0 if x["matches"] == 0 else x[field] / x["matches"], axis = 1) 
         team = team.fillna(0)
         return team
 
@@ -103,6 +154,7 @@ class sportsFantasyLogic:
                 except:
                     time.sleep(3)
                 player = pd.DataFrame(data=res, index=[0])
+                '''
                 if player.iloc[0]["matches"] == 0:
                     del player
                     res = self.apiMethods.getPlayerStatSeason(tag)
@@ -110,6 +162,8 @@ class sportsFantasyLogic:
                     player["is_inner_games"] = 0
                 else:
                     player["is_inner_games"] = 1
+                '''    
+                player["is_inner_games"] = 1
                 print(
                     "Updated player number %d, name %s, search inner %d, cur thread %d"
                     % (self.cur_player_updated, name, player["is_inner_games"], num_thread)
@@ -154,21 +208,21 @@ class sportsFantasyLogic:
     def __getAllPlayersTournamentInner(self):
         month = int(datetime.datetime.now().strftime("%m"))
 
-        if len(self.df_all_players) == 0:
+        if len(self.df_all_players) == 0 or "tag_id" not in list(self.df_all_players.columns):
             self.players_additional_fields = pd.DataFrame()
             self.df_all_players = self.apiMethods.getAllTeamInfo(self.tournament_id)
             self.df_all_players["status"] = False
             self.df_all_players = self.df_all_players.rename(
                 index=str, columns={"points": "season"}
             )
-            dic = self.apiMethods.getPlayersDict(
+            self.dic = self.apiMethods.getPlayersDict(
                 self.season_id,
                 self.tournament_id,
                 month=month,
                 list_ids=list(self.df_all_players["id"]),
             )
             self.df_all_players["tag_id"] = self.df_all_players["id"].apply(
-                lambda x: dic[x] if x in dic else 0
+                lambda x: self.dic[x] if x in self.dic else 0
             )
             print("finish to create team")
 
@@ -296,7 +350,7 @@ class sportsFantasyLogic:
     def getDictionaryFromTeam(self, sort_team):
         transfers = {}
         transfers["order[]"] = []
-        transfers["suidaval"] = "wKgBoVzjp4oxjlQEfGZzAg=="
+        transfers["suidaval"] = "JdHxyF2dgyYSsG+rAxyCAg=="
         for i in range(len(sort_team)):
             key = sort_team[i : i + 1]["id"].to_string(index=False).replace(" ", "")
             order = int(sort_team[i : i + 1]["order"])
@@ -309,9 +363,37 @@ class sportsFantasyLogic:
             value = int(sort_team[i : i + 1]["amplua"])
             transfers["players[%d]" % key] = value
         return transfers
+    
+    def getDictionaryFromTeam2(self, sort_team, positions):
+        transfers = {}
+        transfers["order[]"] = []
+        transfers["suidaval"] = "JdHxyF2dgyYSsG+rAxyCAg=="
+        for i in range(len(sort_team)):
+            cur_player = sort_team.iloc[i]
+            key = int(cur_player["id"])
+            order = int(cur_player["order"])
+            is_captain = int(cur_player["isCaptain"])
+            key = int(key)
+            value = int(cur_player["amplua"])
+            if i == 0: #best player is captain
+                transfers["captain"] = int(key)
+            if positions[value] > 0: #if place in lineup is still availible
+                transfers["players[%d]" % key] = value
+                positions[value] = positions[value] - 1
+            else:
+                transfers["order[]"].append(int(key))
+                transfers["players[%d]" % key] = value
 
-    def sendTransfers(self, df_transfers):
-        transfers = self.getDictionaryFromTeam(df_transfers)
+        return transfers 
+
+    def sendTransfers(self, df_transfers, positions = []):
+        self.team_id
+        if positions == []:
+            transfers = self.getDictionaryFromTeam(df_transfers)
+        else: 
+            transfers = self.getDictionaryFromTeam2(df_transfers, positions)
+        print(transfers)
+        
         return self.apiMethods.sendTransfers(transfers, self.team_id)
 
     def __getDistinceFromAVGPlayer(self, df_players, avg_price):
@@ -364,9 +446,9 @@ class sportsFantasyLogic:
         ax1.yaxis.set_ticks(np.arange(start, end, 10))
         ax1.set_yticklabels([int(i) for i in np.arange(start, end + 10, 10)])
         plt.xticks(rotation=30)
-        plt.title(key)
+        plt.title(self.title)
         plt.grid(True)
-        plt.savefig('static/png/%s.png' % key)
+        plt.savefig('static/png/%s.png' % self.title)
     
     def getNewTeamConcat(self, team, worst_players, best_players):
         team_new = team.copy()
@@ -387,29 +469,10 @@ class sportsFantasyLogic:
         return team_new
 
     def getNewTeamAfterSubstitions(self, team, worst_players, best_players):
-        team_new = self.getNewTeamConcat(team, worst_players, best_players)
-        rows_orders = team_new[["id", "row"]].groupby(["row"]).count().to_dict()["id"]
-        rows_orders_new = {}
-        rows_orders_x = {}
-        for r in rows_orders:
-            rows_orders_new[int(r)] = 0
-            rows_orders_x[int(r)] = rows_orders[r]
-        order = 0
-        for idx in range(len(team_new)):
-            if idx == 0:
-                team_new.at[idx, "isCaptain"] = 1
-            else:
-                team_new.at[idx, "isCaptain"] = 0
-            cur_player = team_new[idx : idx + 1]
-            amplua = int(cur_player["amplua"])
-            if rows_orders_new[amplua] + 1 <= rows_orders_x[amplua]:
-                team_new.at[idx, "row"] = int(cur_player["amplua"])
-                rows_orders_new[amplua] = rows_orders_new[amplua] + 1
-                team_new.at[idx, "order"] = 0
-            else:
-                team_new.at[idx, "row"] = 0
-                order += 1
-                team_new.at[idx, "order"] = order
+        team_new = self.getNewTeamConcat(team, worst_players, best_players).sort_values(
+                    by=list(self.sort_best_rules.keys()),
+                    ascending=list(self.sort_best_rules.values()),
+                ).reset_index()
         return team_new
 
     def getBest(
@@ -422,7 +485,8 @@ class sportsFantasyLogic:
         my_players=[],
         max_player_one_team=2,
     ):
-
+        team = team.fillna(0)
+        #team[team == -inf ] = 0
         if positions != []:
             team = team[team["amplua"].isin(positions)]
             team = team[~team["id"].isin(my_players)]
@@ -432,10 +496,14 @@ class sportsFantasyLogic:
             search_list = self.__getSearchingListPlayers(positions)
             i = 0
             for amplua in positions:
+                #print('eg3gh')
+                #print(self.sort_rules[int(team["amplua"])].keys())
                 df = team[team["amplua"] == amplua].sort_values(
                     by=list(self.sort_best_rules.keys()),
                     ascending=list(self.sort_best_rules.values()),
                 )
+                if (amplua == 1):
+                    self.test = df   
                 print("len of df % d, amplua %d" % (len(df), amplua))
                 search_list[i]["total"] = len(df)  # set total players for each position
                 dfs_search.append(df)
