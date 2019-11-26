@@ -207,7 +207,7 @@ def make_transfers(check=True, _tournament_id = None):
             if check == True:
                 res.append(r)
                 continue   
-            elif tournament_id != None and tournament_id != int(_tournament_id):
+            elif _tournament_id != None and tournament_id != int(_tournament_id):
                 res.append(r)
                 continue 
                 
@@ -241,7 +241,7 @@ def make_transfers(check=True, _tournament_id = None):
                                      max_player_one_team = settings['fantasy_settings']["tournaments"][tour]['max_player_one_team'])
         
         df_transfers = f.getNewTeamAfterSubstitions(team_df, worst_players = worst, best_players = best_players)
-        final = f.sendTransfers(df_transfers, positions)
+        final = f.sendTransfers(df_transfers.reset_index(), positions)
         r["status"] = final
         if str(final).lower().find('ok') > -1:
             r["status_result"] = 1
