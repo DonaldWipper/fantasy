@@ -241,6 +241,10 @@ def make_transfers(check=True, _tournament_id = None):
                                      max_player_one_team = settings['fantasy_settings']["tournaments"][tour]['max_player_one_team'])
         
         df_transfers = f.getNewTeamAfterSubstitions(team_df, worst_players = worst, best_players = best_players)
+        df_transfers = df_transfers.sort_values(
+                    by=list(f.sort_best_rules.keys()),
+                    ascending=list(f.sort_best_rules.values()),
+                ).fillna(0).reset_index()
         final = f.sendTransfers(df_transfers.reset_index(), positions)
         r["status"] = final
         if str(final).lower().find('ok') > -1:
