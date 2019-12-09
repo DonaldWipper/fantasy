@@ -245,9 +245,10 @@ def make_transfers(check=True, _tournament_id = None):
                     by=list(f.sort_best_rules.keys()),
                     ascending=list(f.sort_best_rules.values()),
                 ).fillna(0).reset_index()
-        final = f.sendTransfers(df_transfers.reset_index(), positions)
+        final = f.sendTransfers(df_transfers, positions)
         r["status"] = final
         if str(final).lower().find('ok') > -1:
+            make_substitutions(_tournament_id = tournament_id)
             r["status_result"] = 1
         else:
             r["status_result"] = -1
