@@ -31,10 +31,10 @@ def read_params(fn):
 def update_plot_statictics(_tournament_id = None):
     try:
         settings = read_params("FlaskApp/settings.json")
-        sports = sport_api.sportsApiMethods(settings)
+        sports = sport_api.SportsApiMethods(settings)
     except:
         settings = read_params("settings.json")
-        sports = sport_api.sportsApiMethods(settings)
+        sports = sport_api.SportsApiMethods(settings)
         
     settings_fantasy = settings['fantasy_settings']     
     tournaments = settings_fantasy["tournaments"]
@@ -48,10 +48,10 @@ def update_plot_statictics(_tournament_id = None):
 def make_substitutions(_tournament_id = None):
     try:
         settings = read_params("FlaskApp/settings.json")
-        sports = sport_api.sportsApiMethods(settings)
+        sports = sport_api.SportsApiMethods(settings)
     except:
         settings = read_params("settings.json")
-        sports = sport_api.sportsApiMethods(settings)
+        sports = sport_api.SportsApiMethods(settings)
     settings_fantasy = settings['fantasy_settings']    
     tournaments = settings_fantasy["tournaments"]
     tour = [tour for tour in tournaments if int(_tournament_id) == tournaments[tour] ['tournament_id']][0]
@@ -73,10 +73,10 @@ def make_substitutions(_tournament_id = None):
 def get_myteam_json(_tournament_id):
     try:
         settings = read_params("FlaskApp/settings.json")
-        sports = sport_api.sportsApiMethods(settings)
+        sports = sport_api.SportsApiMethods(settings)
     except:
         settings = read_params("settings.json")
-        sports = sport_api.sportsApiMethods(settings)
+        sports = sport_api.SportsApiMethods(settings)
         
     settings_fantasy = settings['fantasy_settings']    
     tournaments = settings_fantasy["tournaments"]
@@ -132,10 +132,10 @@ def make_transfers(check=True, _tournament_id = None):
     #settings = read_params("settings.json")
     try:
         settings = read_params("FlaskApp/settings.json")
-        sports = sport_api.sportsApiMethods(settings)
+        sports = sport_api.SportsApiMethods(settings)
     except:
         settings = read_params("settings.json")
-        sports = sport_api.sportsApiMethods(settings)
+        sports = sport_api.SportsApiMethods(settings)
         
     try:
         last_try_sub = pd.read_csv("FlaskApp/data.csv")
@@ -162,10 +162,10 @@ def make_transfers(check=True, _tournament_id = None):
     login = settings_fantasy['login']
     password = settings_fantasy['password']
     today_dd_mm = date.today().strftime("%d.%m")
-    sports = sport_api.sportsApiMethods(settings, 
-                                    url_login, 
-                                    login, 
-                                    password) 
+    sports = sport_api.SportsApiMethods(settings,
+                                        url_login,
+                                        login,
+                                        password)
     teams = []
     res = []
     for tour in tournaments:
