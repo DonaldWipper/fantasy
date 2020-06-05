@@ -131,6 +131,49 @@ def get_color_by_state(status):
         return 'red'
 
 
+def create_new_team(_tournament_id=None):
+    try:
+        settings = read_params("FlaskApp/settings.json")
+        sports = sport_api.SportsApiMethods(settings)
+    except:
+        settings = read_params("settings.json")
+        sports = sport_api.SportsApiMethods(settings)
+    settings_fantasy = settings['fantasy_settings']
+    tournaments = settings_fantasy["tournaments"]
+    print(tournaments)
+    tour = [tour for tour in tournaments if tournaments[tour]['tournament_id'] == _tournament_id][0]
+    team_id = tournaments[tour]['team_id']
+    tournament_id = tournaments[tour]['tournament_id']
+    season_id = tournaments[tour]['season_id']
+    team_df = pd.DataFrame()
+    positions_worst = [1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 3, 2, 2, 1]
+    positions = {1: 1, 2: 3, 3: 4, 4: 2}
+    teams_limit_send = {}
+    players_ids = []
+    sum_price = 100
+    worst = [1]
+    f = fantasy_logic.sportsFantasyLogic(team_id, tournament_id, season_id, sports)
+    all_players_df = f.getAllFantasyPlayers()
+    best_players = f.getBest(team=all_players_df,
+                             positions=positions_worst,
+                             sum_price=sum_price,
+                             teamsLimit=teams_limit_send,
+                             my_players=players_ids,
+                             max_player_one_team=settings['fantasy_settings']["tournaments"][tour][
+                                 'max_player_one_team'])
+
+    df_transfers = f.getNewTeamAfterSubstitions(team_df, worst_players=worst, best_players=best_players)
+    df_transfers = df_transfers.sort_values(
+        by=list(f.sort_best_rules.keys()),
+        ascending=list(f.sort_best_rules.values()),
+    ).fillna(0).reset_index()
+    final = f.sendTransfers(df_transfers, positions)
+    if str(final).lower().find('ok') > -1:
+        make_substitutions(_tournament_id=tournament_id)
+    else:
+        print('not ok')
+
+
 def make_transfers(check=True, _tournament_id=None):
     # settings = read_params("settings.json")
     try:
@@ -159,7 +202,7 @@ def make_transfers(check=True, _tournament_id=None):
     fantasy_info = sports.getFantasyInfo()
     for idx in range(len(fantasy_info)):
         deadline_dict[fantasy_info.at[idx, 'id']] = fantasy_info.at[idx, 'date']
-    url_settings = settings['sport_api']
+
     settings_fantasy = settings['fantasy_settings']
     tournaments = settings_fantasy["tournaments"]
     url_login = settings_fantasy['url_login']
@@ -172,6 +215,7 @@ def make_transfers(check=True, _tournament_id=None):
                                         password)
     teams = []
     res = []
+    print(deadline_dict)
     for tour in tournaments:
         team_id = tournaments[tour]['team_id']
         tournament_id = tournaments[tour]['tournament_id']
@@ -184,7 +228,6 @@ def make_transfers(check=True, _tournament_id=None):
         print(str(dict_last_try[int(tournament_id)][0]) == deadline_dict[team_id])
         if int(tournament_id) in dict_last_try and str(dict_last_try[int(tournament_id)][0]).zfill(5) == deadline_dict[
             team_id]:
-            print('inside sfsg')
             if dict_last_try[tournament_id][1] in [1]:
                 # r["status"] = dict_last_try[tournament_id][1]
                 r["status"] = dict_last_try[tournament_id][3]

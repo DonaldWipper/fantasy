@@ -87,8 +87,14 @@
         "season_id": 7378,
         "number_subs": 3,
         "max_player_one_team": 2
-      }  
-        
+      },
+      "высшая лига Южная Корея": {
+        "team_id": 2219326,
+        "tournament_id": 396,
+        "season_id": 7889,
+        "number_subs": 3,
+        "max_player_one_team": 2
+      }
     }
   },
   "gitlab":{ 

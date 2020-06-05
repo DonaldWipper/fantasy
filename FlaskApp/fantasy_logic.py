@@ -371,8 +371,8 @@ class sportsFantasyLogic:
         for i in range(len(sort_team)):
             cur_player = sort_team.iloc[i]
             key = int(cur_player["id"])
-            order = int(cur_player["order"])
-            is_captain = int(cur_player["isCaptain"])
+            #order = int(cur_player["order"])
+            #is_captain = int(cur_player["isCaptain"])
             key = int(key)
             value = int(cur_player["amplua"])
             if i == 0: #best player is captain
