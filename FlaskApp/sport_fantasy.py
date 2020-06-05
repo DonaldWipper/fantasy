@@ -224,8 +224,7 @@ def make_transfers(check=True, _tournament_id=None):
             r = {"tournament_id": tournament_id, "tournament": tour, "deadline": deadline_dict[team_id]}
         except:
             continue
-        print(str(dict_last_try[int(tournament_id)][0]).zfill(5))
-        print(str(dict_last_try[int(tournament_id)][0]) == deadline_dict[team_id])
+
         if int(tournament_id) in dict_last_try and str(dict_last_try[int(tournament_id)][0]).zfill(5) == deadline_dict[
             team_id]:
             if dict_last_try[tournament_id][1] in [1]:

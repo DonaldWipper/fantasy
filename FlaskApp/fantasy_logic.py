@@ -458,7 +458,7 @@ class sportsFantasyLogic:
                 team_new[team_new["id"].isin(worst_ids)].index
             )  # delete worst players
         team_new = (
-            pd.concat([team_new, best_players])
+            pd.concat([team_new, best_players],sort=False)
             .sort_values(
                 by=list(self.sort_best_rules.keys()),
                 ascending=list(self.sort_best_rules.values()),
