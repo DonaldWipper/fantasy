@@ -1,13 +1,5 @@
-import requests
 import json
-import io
-import numpy as np  # linear algebra
 import pandas as pd
-import datetime
-import math
-# import fantasy_logic as fantasy_logic
-# import sport_api as sport_api
-from urllib.parse import parse_qs
 from datetime import date
 
 try:
