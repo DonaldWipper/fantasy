@@ -18,7 +18,7 @@ class MyHTMLParser(HTMLParser):
         self.tours = {}
         self.leagues = []
         self.tour = None
-
+    #test
     def handle_starttag(self, tag, attrs):
         if self.flag_print_parse_log == True:
             print("Start tag:", tag)
