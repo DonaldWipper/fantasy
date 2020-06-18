@@ -9,8 +9,6 @@ try:
 except:
     import sport_fantasy as sport_fantasy
 
-print(os.curdir())
-
 
 
 
@@ -26,16 +24,16 @@ for f in files:
 # do something
 
 
-app = Flask(__name__)
-app.config.from_object(__name__)
-app.config["TEMPLATES_AUTO_RELOAD"] = True
+application = Flask(__name__)
+application.config.from_object(__name__)
+application.config["TEMPLATES_AUTO_RELOAD"] = True
 
 
 def render(res, lineup={}):
     return render_template("log.html", res2=res, lineup=lineup)
 
 
-@app.route("/update_statistics", methods=["GET"])
+@application.route("/update_statistics", methods=["GET"])
 def update_statistics():
     tournament_id = request.args.get("tournament_id")
     sport_fantasy.update_plot_statictics()
@@ -43,7 +41,7 @@ def update_statistics():
     return render(res)
 
 
-@app.route("/make_substitutions", methods=["GET"])
+@application.route("/make_substitutions", methods=["GET"])
 def make_substitutions():
     tournament_id = request.args.get("tournament_id")
     sport_fantasy.make_substitutions(_tournament_id=tournament_id)
@@ -52,14 +50,14 @@ def make_substitutions():
     return render(res, lineup)
 
 
-@app.route("/make_transfers", methods=["GET"])
+@application.route("/make_transfers", methods=["GET"])
 def make_transfers():
     tournament_id = request.args.get("tournament_id")
     res = sport_fantasy.make_transfers(check=False, _tournament_id=tournament_id)
     return render(res)
 
 
-@app.route("/show_line_up", methods=["GET"])
+@application.route("/show_line_up", methods=["GET"])
 def show_line_up():
     tournament_id = request.args.get("tournament_id")
     lineup = sport_fantasy.get_myteam_json(_tournament_id=tournament_id)
@@ -70,7 +68,7 @@ def show_line_up():
 # sched.start()
 
 
-@app.route("/", methods=["GET"])
+@application.route("/", methods=["GET"])
 def main():
     res = sport_fantasy.make_transfers()
     print(res)
@@ -78,4 +76,4 @@ def main():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    application.run(debug=True)

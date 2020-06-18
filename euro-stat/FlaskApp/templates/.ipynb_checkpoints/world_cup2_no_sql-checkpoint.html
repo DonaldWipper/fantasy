@@ -1,0 +1,1749 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>World-cup-visual</title>
+
+    <!-- D3.js -->
+
+    <script src="/static/js/d3.min.js"></script>
+
+    <script src="/static/js/d3pie.min.js"></script>
+
+    <script src="/static/js/jquery-1.9.0.js"></script>
+
+    <script src="/static/js/topojson.min.js"></script>
+
+
+    <script src="/static/js/datamaps.world.min.js"></script>
+
+    <script src="/static/js/go.js"></script>
+
+ 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+   
+    <link rel="stylesheet" href="/static/css/normalize.min.css">
+
+    <link rel="icon" href="/static/png/world_cup.png">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style_menu.css">
+    
+    <script src="/static/js/globalize.min.js"></script>
+    <script src="/static/js/dx.chartjs.js"></script>
+    <script src="/static/js/knockout-3.0.0.js"></script>
+    
+    
+
+</head>
+    
+
+<body>
+
+    <div id="donutVisual" style="position: absolute;"></div>
+    <div id="my-icon-select" style="position: absolute;"></div>
+
+
+    <script>
+         ////////////////////////// //////////////////////////////////
+        //////////////////////// Set-up ////////////////////////////
+        ////////////////////////////////////////////////////////////
+        var tournaments = [
+              {
+                text: "World Cup 1930 Uruguay",
+                value: 378,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1930.png"  
+            },
+              {
+                text: "World Cup 1934 Italy",
+                value: 377,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1934.png"  
+            },
+              {
+                text: "World Cup 1938 France",
+                value: 376,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1938.png"  
+            },
+              {
+                text: "World Cup 1950 Brazil",
+                value: 379,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1950.png"  
+            },
+              {
+                text: "World Cup 1954 Switzerland",
+                value: 382,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1954.png"  
+            },
+              {
+                text: "World Cup 1958 Sweden",
+                value: 374,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1958.png"  
+            },
+              {
+                text: "World Cup 1962 Chile",
+                value: 380,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1962.png"  
+            },
+              {
+                text: "World Cup 1966 England",
+                value: 407,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1966.png"  
+            },
+              {
+                text: "World Cup 1970 Mexico",
+                value: 409,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1970.png"  
+            },
+              {
+                text: "World Cup 1974 Germany",
+                value: 375,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1974.png"  
+            },
+              {
+                text: "World Cup 1978 Argentina",
+                value: 381,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1978.png"  
+            },
+              {
+                text: "World Cup 1982 Spain",
+                value: 373,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1982.png"  
+            },
+              {
+                text: "World Cup 1986 Mexico",
+                value: 372,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1986.png"  
+            },
+              {
+                text: "World Cup 1990 Italy",
+                value: 371,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1990.png"  
+            },
+              {
+                text: "World Cup 1994 USA",
+                value: 370,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1994.png"  
+            },
+              {
+                text: "World Cup 1998 France",
+                value: 369,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/1998.png"  
+            },
+              {
+                text: "World Cup 2002 South Korea / Japan",
+                value: 367,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/2002.png"  
+            },
+              {
+                text: "World Cup 2006 Germany",
+                value: 366,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/2006.png"  
+            },
+              {
+                text: "World Cup 2010 South Africa",
+                value: 365,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/2010.png"  
+            },
+              {
+                text: "World Cup 2014 Brasil",
+                value: 406,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/2014.png"  
+            },
+              {
+                text: "World Cup 2018 Russia",
+                value: 467,
+                selected:true,
+                imageSrc: "https://img.fifa.com/images/tournaments/17/logo/2018.png"  
+            },
+              {
+                text: "UEFA European Championship 1960 France",
+                value: 1416,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/1960.png"  
+            },
+              {
+                text: "UEFA European Championship 1964 Spain",
+                value: 1420,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/1964.png"  
+            },
+              {
+                text: "UEFA European Championship 1968 Italy",
+                value: 1424,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/1968.png"  
+            },
+              {
+                text: "UEFA European Championship 1972 Belgium",
+                value: 1428,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/1972.png"  
+            },
+              {
+                text: "UEFA European Championship 1976 Yugoslavia",
+                value: 1432,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/1976.png"  
+            },
+              {
+                text: "UEFA European Championship 1980 Italy",
+                value: 1436,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/1980.png"  
+            },
+              {
+                text: "UEFA European Championship 1984 France",
+                value: 1440,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/1984.png"  
+            },
+              {
+                text: "UEFA European Championship 1988 West Germany",
+                value: 1444,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/1988.png"  
+            },
+              {
+                text: "UEFA European Championship 1992 Sweden",
+                value: 1448,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/1992.png"  
+            },
+              {
+                text: "UEFA European Championship 1996 England",
+                value: 1452,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/1996.png"  
+            },
+              {
+                text: "UEFA European Championship 2000 Belgium-Netherlands",
+                value: 1456,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/2000.png"  
+            },
+              {
+                text: "UEFA European Championship 2004 Portugal",
+                value: 1460,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/2004.png"  
+            },
+              {
+                text: "UEFA European Championship 2008 Austria-Switzerland",
+                value: 1464,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/2008.png"  
+            },
+              {
+                text: "UEFA European Championship 2012 Poland-Ukraine",
+                value: 1468,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/2012.png"  
+            },
+              {
+                text: "UEFA European Championship 2016 France",
+                value: 1472,
+                selected:true,
+                imageSrc: "https://www.uefa.com/imgml/comp/euro/history/EditionInternalCarouselLogo/2016.png"  
+            },
+             
+        ]
+
+        var show_games = {
+             
+            0:[23, 36, 38],
+             
+            1:[3, 29, 40, 56],
+             
+            2:[18, 28, 59],
+             
+            3:[47, 49, 63],
+             
+            4:[15, 17, 21],
+             
+            5:[13, 16, 41, 50, 62],
+             
+            6:[17, 53, 60],
+             
+            7:[0, 1, 14, 28, 34, 54, 57],
+             
+            8:[9, 31, 58],
+             
+            9:[18, 25, 50, 54],
+             
+            10:[5, 6, 11, 29, 32],
+             
+            11:[10, 13, 14, 26, 35, 43, 63],
+             
+            12:[7, 20, 31, 44],
+             
+            13:[7, 12, 26, 27, 33, 46, 58],
+             
+            14:[1, 8, 41, 52],
+             
+            15:[2, 23, 55],
+             
+            16:[2, 22, 34, 36, 42],
+             
+            17:[6, 30, 40],
+             
+            18:[24, 46, 51, 56, 61],
+             
+            19:[4, 24, 48],
+             
+            20:[10, 19, 22, 47],
+             
+            21:[15, 27, 39, 60],
+             
+            22:[0, 5, 12, 21, 39, 44, 53],
+             
+            23:[3, 11, 30],
+             
+            24:[9, 20, 33],
+             
+            25:[8, 37, 62],
+             
+            26:[35, 38, 42, 55],
+             
+            27:[4, 32, 45, 61],
+             
+            28:[16, 37, 52],
+             
+            29:[45, 48, 51],
+             
+            30:[19, 43, 49],
+             
+            31:[25, 57, 59],
+             
+            32:[],
+             
+            33:[58],
+             
+            34:[20, 21, 60],
+             
+            35:[29, 30, 48, 61],
+             
+            36:[52, 57, 62],
+             
+            37:[18, 19, 63],
+             
+            38:[7, 23, 42],
+             
+            39:[9, 15, 53],
+             
+            40:[4, 40, 51],
+             
+            41:[11, 37, 41],
+             
+            42:[25, 28, 43],
+             
+            43:[36, 47, 55],
+             
+            44:[17, 31, 33, 39],
+             
+            45:[3, 6, 24, 45],
+             
+            46:[8, 16, 54, 59],
+             
+            47:[2, 10, 38, 49],
+             
+            48:[27, 56],
+             
+            49:[32, 44],
+             
+            50:[35, 50],
+             
+            51:[1, 22],
+             
+            52:[13, 46],
+             
+            53:[5, 34],
+             
+            54:[26],
+             
+            55:[0],
+             
+            56:[12],
+             
+            57:[14],
+             
+            58:[],
+             
+            59:[0, 1, 2, 39, 40, 58],
+             
+            60:[3, 4, 19, 20],
+             
+            61:[5, 21, 22, 41, 59, 63],
+             
+            62:[23, 24, 25, 60],
+             
+            63:[6, 26, 27, 28, 42, 61],
+             
+            64:[7, 29, 43, 44, 45, 46],
+             
+            65:[8, 9, 30, 47],
+             
+            66:[10, 11, 31, 32, 48],
+             
+            67:[12, 33, 34, 49, 50, 51, 52],
+             
+            68:[35, 53, 54, 55, 62],
+             
+            69:[13, 14, 15, 16, 36, 56, 57],
+             
+            70:[17, 18, 37, 38],
+             
+            71:[],
+             
+            72:[7, 9, 20, 31, 33, 58],
+             
+            73:[15, 17, 21, 39, 53, 60],
+             
+            74:[4, 24, 45, 48, 51, 61],
+             
+            75:[3, 6, 11, 29, 30, 40],
+             
+            76:[8, 16, 37, 41, 52, 62],
+             
+            77:[18, 25, 28, 54, 57, 59],
+             
+            78:[10, 19, 43, 47, 49, 63],
+             
+            79:[2, 23, 36, 38, 42, 55],
+             
+            80:[1, 22, 27, 32, 35, 44, 50, 56],
+             
+            81:[5, 13, 34, 46],
+             
+            82:[0, 26],
+             
+            83:[12],
+             
+            84:[14],
+             
+        }
+             
+
+       var games = [
+             { 
+                 "teamHome": "Netherlands",
+                 "teamAway": "Argentina",
+                 "result": "0.0(2.0):0.0(4.0)",
+                 "city": "Sao Paulo", 
+                 "stadium": "Arena de Sao Paulo",  
+                 "date": "07.09",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "0.0(2.0)",  
+                 "goalsAwayTeam": "0.0(4.0)"  
+            },
+              { 
+                 "teamHome": "Argentina",
+                 "teamAway": "Switzerland",
+                 "result": "1.0:0.0",
+                 "city": "Sao Paulo", 
+                 "stadium": "Arena de Sao Paulo",  
+                 "date": "07.01",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "1.0",  
+                 "goalsAwayTeam": "0.0"  
+            },
+              { 
+                 "teamHome": "Korea Republic",
+                 "teamAway": "Belgium",
+                 "result": "0:1",
+                 "city": "Sao Paulo", 
+                 "stadium": "Arena de Sao Paulo",  
+                 "date": "06.26",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Italy",
+                 "teamAway": "Uruguay",
+                 "result": "0:1",
+                 "city": "Natal", 
+                 "stadium": "Estadio das Dunas",  
+                 "date": "06.24",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Japan",
+                 "teamAway": "Greece",
+                 "result": "0:0",
+                 "city": "Natal", 
+                 "stadium": "Estadio das Dunas",  
+                 "date": "06.19",  
+                 "time": "19:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Netherlands",
+                 "teamAway": "Costa Rica",
+                 "result": "0.0(4.0):0.0(3.0)",
+                 "city": "Salvador", 
+                 "stadium": "Arena Fonte Nova",  
+                 "date": "07.05",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "0.0(4.0)",  
+                 "goalsAwayTeam": "0.0(3.0)"  
+            },
+              { 
+                 "teamHome": "Costa Rica",
+                 "teamAway": "England",
+                 "result": "0:0",
+                 "city": "Belo Horizonte", 
+                 "stadium": "Estadio Mineirao",  
+                 "date": "06.24",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Brazil",
+                 "teamAway": "Mexico",
+                 "result": "0:0",
+                 "city": "Fortaleza", 
+                 "stadium": "Estadio Castelao",  
+                 "date": "06.17",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Honduras",
+                 "teamAway": "Switzerland",
+                 "result": "0:3",
+                 "city": "Manaus", 
+                 "stadium": "Arena Amazonia",  
+                 "date": "06.25",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "3"  
+            },
+              { 
+                 "teamHome": "Cameroon",
+                 "teamAway": "Croatia",
+                 "result": "0:4",
+                 "city": "Manaus", 
+                 "stadium": "Arena Amazonia",  
+                 "date": "06.18",  
+                 "time": "18:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "4"  
+            },
+              { 
+                 "teamHome": "United States",
+                 "teamAway": "Germany",
+                 "result": "0:1",
+                 "city": "Recife", 
+                 "stadium": "Arena Pernambuco",  
+                 "date": "06.26",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Italy",
+                 "teamAway": "Costa Rica",
+                 "result": "0:1",
+                 "city": "Recife", 
+                 "stadium": "Arena Pernambuco",  
+                 "date": "06.20",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Brazil",
+                 "teamAway": "Netherlands",
+                 "result": "0:3",
+                 "city": "Brasilia", 
+                 "stadium": "Estadio Nacional",  
+                 "date": "07.12",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "3"  
+            },
+              { 
+                 "teamHome": "France",
+                 "teamAway": "Germany",
+                 "result": "0:1",
+                 "city": "Rio De Janeiro", 
+                 "stadium": "Estadio do Maracana",  
+                 "date": "07.04",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Germany",
+                 "teamAway": "Argentina",
+                 "result": "1.0:0.0",
+                 "city": "Rio De Janeiro", 
+                 "stadium": "Estadio do Maracana",  
+                 "date": "07.13",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "1.0",  
+                 "goalsAwayTeam": "0.0"  
+            },
+              { 
+                 "teamHome": "Spain",
+                 "teamAway": "Chile",
+                 "result": "0:2",
+                 "city": "Rio De Janeiro", 
+                 "stadium": "Estadio do Maracana",  
+                 "date": "06.18",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "2"  
+            },
+              { 
+                 "teamHome": "Ecuador",
+                 "teamAway": "France",
+                 "result": "0:0",
+                 "city": "Rio De Janeiro", 
+                 "stadium": "Estadio do Maracana",  
+                 "date": "06.25",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Australia",
+                 "teamAway": "Spain",
+                 "result": "0:3",
+                 "city": "Curitiba", 
+                 "stadium": "Arena da Baixada",  
+                 "date": "06.23",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "3"  
+            },
+              { 
+                 "teamHome": "IR Iran",
+                 "teamAway": "Nigeria",
+                 "result": "0:0",
+                 "city": "Curitiba", 
+                 "stadium": "Arena da Baixada",  
+                 "date": "06.16",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "0",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Ghana",
+                 "teamAway": "United States",
+                 "result": "1:2",
+                 "city": "Natal", 
+                 "stadium": "Estadio das Dunas",  
+                 "date": "06.16",  
+                 "time": "19:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "2"  
+            },
+              { 
+                 "teamHome": "Mexico",
+                 "teamAway": "Cameroon",
+                 "result": "1:0",
+                 "city": "Natal", 
+                 "stadium": "Estadio das Dunas",  
+                 "date": "06.13",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Spain",
+                 "teamAway": "Netherlands",
+                 "result": "1:5",
+                 "city": "Salvador", 
+                 "stadium": "Arena Fonte Nova",  
+                 "date": "06.13",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "5"  
+            },
+              { 
+                 "teamHome": "Belgium",
+                 "teamAway": "United States",
+                 "result": "2.0:1.0",
+                 "city": "Salvador", 
+                 "stadium": "Arena Fonte Nova",  
+                 "date": "07.01",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "2.0",  
+                 "goalsAwayTeam": "1.0"  
+            },
+              { 
+                 "teamHome": "Russia",
+                 "teamAway": "Korea Republic",
+                 "result": "1:1",
+                 "city": "Cuiaba", 
+                 "stadium": "Arena Pantanal",  
+                 "date": "06.17",  
+                 "time": "18:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Japan",
+                 "teamAway": "Colombia",
+                 "result": "1:4",
+                 "city": "Cuiaba", 
+                 "stadium": "Arena Pantanal",  
+                 "date": "06.24",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "4"  
+            },
+              { 
+                 "teamHome": "Nigeria",
+                 "teamAway": "Bosnia and Herzegovina",
+                 "result": "1:0",
+                 "city": "Cuiaba", 
+                 "stadium": "Arena Pantanal",  
+                 "date": "06.21",  
+                 "time": "18:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Brazil",
+                 "teamAway": "Germany",
+                 "result": "1:7",
+                 "city": "Belo Horizonte", 
+                 "stadium": "Estadio Mineirao",  
+                 "date": "07.08",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "7"  
+            },
+              { 
+                 "teamHome": "Brazil",
+                 "teamAway": "Chile",
+                 "result": "0.0(3.0):0.0(2.0)",
+                 "city": "Belo Horizonte", 
+                 "stadium": "Estadio Mineirao",  
+                 "date": "06.28",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "0.0(3.0)",  
+                 "goalsAwayTeam": "0.0(2.0)"  
+            },
+              { 
+                 "teamHome": "Argentina",
+                 "teamAway": "IR Iran",
+                 "result": "1:0",
+                 "city": "Belo Horizonte", 
+                 "stadium": "Estadio Mineirao",  
+                 "date": "06.21",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Uruguay",
+                 "teamAway": "Costa Rica",
+                 "result": "1:3",
+                 "city": "Fortaleza", 
+                 "stadium": "Estadio Castelao",  
+                 "date": "06.14",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "3"  
+            },
+              { 
+                 "teamHome": "England",
+                 "teamAway": "Italy",
+                 "result": "1:2",
+                 "city": "Manaus", 
+                 "stadium": "Arena Amazonia",  
+                 "date": "06.14",  
+                 "time": "18:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "2"  
+            },
+              { 
+                 "teamHome": "Croatia",
+                 "teamAway": "Mexico",
+                 "result": "1:3",
+                 "city": "Recife", 
+                 "stadium": "Arena Pernambuco",  
+                 "date": "06.23",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "3"  
+            },
+              { 
+                 "teamHome": "Costa Rica",
+                 "teamAway": "Greece",
+                 "result": "0.0(5.0):0.0(3.0)",
+                 "city": "Recife", 
+                 "stadium": "Arena Pernambuco",  
+                 "date": "06.29",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "0.0(5.0)",  
+                 "goalsAwayTeam": "0.0(3.0)"  
+            },
+              { 
+                 "teamHome": "Cameroon",
+                 "teamAway": "Brazil",
+                 "result": "1:4",
+                 "city": "Brasilia", 
+                 "stadium": "Estadio Nacional",  
+                 "date": "06.23",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "4"  
+            },
+              { 
+                 "teamHome": "Argentina",
+                 "teamAway": "Belgium",
+                 "result": "1:0",
+                 "city": "Brasilia", 
+                 "stadium": "Estadio Nacional",  
+                 "date": "07.05",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Germany",
+                 "teamAway": "Algeria",
+                 "result": "2.0:1.0",
+                 "city": "Porto Alegre", 
+                 "stadium": "Estadio Beira-Rio",  
+                 "date": "06.30",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "2.0",  
+                 "goalsAwayTeam": "1.0"  
+            },
+              { 
+                 "teamHome": "Belgium",
+                 "teamAway": "Russia",
+                 "result": "1:0",
+                 "city": "Rio De Janeiro", 
+                 "stadium": "Estadio do Maracana",  
+                 "date": "06.22",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Honduras",
+                 "teamAway": "Ecuador",
+                 "result": "1:2",
+                 "city": "Curitiba", 
+                 "stadium": "Arena da Baixada",  
+                 "date": "06.20",  
+                 "time": "19:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "2"  
+            },
+              { 
+                 "teamHome": "Algeria",
+                 "teamAway": "Russia",
+                 "result": "1:1",
+                 "city": "Curitiba", 
+                 "stadium": "Arena da Baixada",  
+                 "date": "06.26",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "1",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Netherlands",
+                 "teamAway": "Chile",
+                 "result": "2:0",
+                 "city": "Sao Paulo", 
+                 "stadium": "Arena de Sao Paulo",  
+                 "date": "06.23",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Uruguay",
+                 "teamAway": "England",
+                 "result": "2:1",
+                 "city": "Sao Paulo", 
+                 "stadium": "Arena de Sao Paulo",  
+                 "date": "06.19",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Switzerland",
+                 "teamAway": "France",
+                 "result": "2:5",
+                 "city": "Salvador", 
+                 "stadium": "Arena Fonte Nova",  
+                 "date": "06.20",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "5"  
+            },
+              { 
+                 "teamHome": "Belgium",
+                 "teamAway": "Algeria",
+                 "result": "2:1",
+                 "city": "Belo Horizonte", 
+                 "stadium": "Estadio Mineirao",  
+                 "date": "06.17",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Germany",
+                 "teamAway": "Ghana",
+                 "result": "2:2",
+                 "city": "Fortaleza", 
+                 "stadium": "Estadio Castelao",  
+                 "date": "06.21",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "2"  
+            },
+              { 
+                 "teamHome": "Netherlands",
+                 "teamAway": "Mexico",
+                 "result": "2:1",
+                 "city": "Fortaleza", 
+                 "stadium": "Estadio Castelao",  
+                 "date": "06.29",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Greece",
+                 "teamAway": "Ivory Coast",
+                 "result": "2:1",
+                 "city": "Fortaleza", 
+                 "stadium": "Estadio Castelao",  
+                 "date": "06.24",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Brazil",
+                 "teamAway": "Colombia",
+                 "result": "2:1",
+                 "city": "Fortaleza", 
+                 "stadium": "Estadio Castelao",  
+                 "date": "07.04",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "United States",
+                 "teamAway": "Portugal",
+                 "result": "2:2",
+                 "city": "Manaus", 
+                 "stadium": "Arena Amazonia",  
+                 "date": "06.22",  
+                 "time": "18:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "2"  
+            },
+              { 
+                 "teamHome": "Ivory Coast",
+                 "teamAway": "Japan",
+                 "result": "2:1",
+                 "city": "Recife", 
+                 "stadium": "Arena Pernambuco",  
+                 "date": "06.14",  
+                 "time": "22:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Portugal",
+                 "teamAway": "Ghana",
+                 "result": "2:1",
+                 "city": "Brasilia", 
+                 "stadium": "Estadio Nacional",  
+                 "date": "06.26",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "France",
+                 "teamAway": "Nigeria",
+                 "result": "2:0",
+                 "city": "Brasilia", 
+                 "stadium": "Estadio Nacional",  
+                 "date": "06.30",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Colombia",
+                 "teamAway": "Ivory Coast",
+                 "result": "2:1",
+                 "city": "Brasilia", 
+                 "stadium": "Estadio Nacional",  
+                 "date": "06.19",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Switzerland",
+                 "teamAway": "Ecuador",
+                 "result": "2:1",
+                 "city": "Brasilia", 
+                 "stadium": "Estadio Nacional",  
+                 "date": "06.15",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Australia",
+                 "teamAway": "Netherlands",
+                 "result": "2:3",
+                 "city": "Porto Alegre", 
+                 "stadium": "Estadio Beira-Rio",  
+                 "date": "06.18",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "3"  
+            },
+              { 
+                 "teamHome": "Nigeria",
+                 "teamAway": "Argentina",
+                 "result": "2:3",
+                 "city": "Porto Alegre", 
+                 "stadium": "Estadio Beira-Rio",  
+                 "date": "06.25",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "3"  
+            },
+              { 
+                 "teamHome": "Korea Republic",
+                 "teamAway": "Algeria",
+                 "result": "2:4",
+                 "city": "Porto Alegre", 
+                 "stadium": "Estadio Beira-Rio",  
+                 "date": "06.22",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "4"  
+            },
+              { 
+                 "teamHome": "Colombia",
+                 "teamAway": "Uruguay",
+                 "result": "2:0",
+                 "city": "Rio De Janeiro", 
+                 "stadium": "Estadio do Maracana",  
+                 "date": "06.28",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Argentina",
+                 "teamAway": "Bosnia and Herzegovina",
+                 "result": "2:1",
+                 "city": "Rio De Janeiro", 
+                 "stadium": "Estadio do Maracana",  
+                 "date": "06.15",  
+                 "time": "19:00",
+                 "goalsHomeTeam": "2",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Brazil",
+                 "teamAway": "Croatia",
+                 "result": "3:1",
+                 "city": "Sao Paulo", 
+                 "stadium": "Arena de Sao Paulo",  
+                 "date": "06.12",  
+                 "time": "17:00",
+                 "goalsHomeTeam": "3",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Bosnia and Herzegovina",
+                 "teamAway": "IR Iran",
+                 "result": "3:1",
+                 "city": "Salvador", 
+                 "stadium": "Arena Fonte Nova",  
+                 "date": "06.25",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "3",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Chile",
+                 "teamAway": "Australia",
+                 "result": "3:1",
+                 "city": "Cuiaba", 
+                 "stadium": "Arena Pantanal",  
+                 "date": "06.13",  
+                 "time": "18:00",
+                 "goalsHomeTeam": "3",  
+                 "goalsAwayTeam": "1"  
+            },
+              { 
+                 "teamHome": "Colombia",
+                 "teamAway": "Greece",
+                 "result": "3:0",
+                 "city": "Belo Horizonte", 
+                 "stadium": "Estadio Mineirao",  
+                 "date": "06.14",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "3",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "France",
+                 "teamAway": "Honduras",
+                 "result": "3:0",
+                 "city": "Porto Alegre", 
+                 "stadium": "Estadio Beira-Rio",  
+                 "date": "06.15",  
+                 "time": "16:00",
+                 "goalsHomeTeam": "3",  
+                 "goalsAwayTeam": "0"  
+            },
+              { 
+                 "teamHome": "Germany",
+                 "teamAway": "Portugal",
+                 "result": "4:0",
+                 "city": "Salvador", 
+                 "stadium": "Arena Fonte Nova",  
+                 "date": "06.16",  
+                 "time": "13:00",
+                 "goalsHomeTeam": "4",  
+                 "goalsAwayTeam": "0"  
+            },
+              
+            ]
+                   
+        var outArcsData = [
+             {
+                "name": "NATIONAL TEAMS",
+                 "color": "#ABDDA4"
+                    
+            },
+             {
+                "name": "WORLD CUP SCHEDULE",
+                 "color": "#2c7bb6"
+                    
+            },
+             {
+                "name": "CITIES AND STADIUMS",
+                 "color": "#d7191c"
+                    
+            },
+             {
+                "name": "GROUPS ANS STAGES",
+                 "color": "#d7c119"
+                    
+            },
+             
+        ]
+            
+        
+        
+        var click_events = {
+             
+             0:[38, 43, 47, 79, 79, 79, 62, 69, 70],
+             
+             1:[45, 35, 40, 48, 75, 75, 75, 80, 60, 64, 59, 69],
+             
+             2:[37, 42, 46, 77, 77, 77, 70, 63, 61],
+             
+             3:[43, 47, 37, 78, 78, 78, 65, 67, 61],
+             
+             4:[39, 44, 34, 73, 73, 73, 69, 70, 61],
+             
+             5:[52, 46, 41, 50, 36, 81, 76, 76, 80, 76, 69, 69, 61, 67, 68],
+             
+             6:[44, 39, 34, 73, 73, 73, 70, 68, 62],
+             
+             7:[55, 51, 57, 42, 53, 46, 36, 82, 80, 84, 77, 81, 77, 77, 59, 59, 69, 63, 67, 68, 69],
+             
+             8:[39, 44, 33, 72, 72, 72, 65, 66, 59],
+             
+             9:[37, 42, 50, 46, 77, 77, 80, 77, 70, 62, 67, 68],
+             
+             10:[53, 45, 41, 35, 49, 81, 75, 75, 75, 80, 61, 63, 66, 64, 66],
+             
+             11:[47, 52, 57, 54, 50, 42, 37, 78, 81, 84, 82, 80, 78, 78, 66, 69, 69, 63, 68, 64, 61],
+             
+             12:[38, 34, 44, 49, 72, 72, 72, 80, 64, 60, 66, 64],
+             
+             13:[38, 56, 54, 48, 44, 52, 33, 72, 83, 82, 80, 72, 81, 72, 64, 67, 63, 63, 67, 64, 59],
+             
+             14:[51, 46, 41, 36, 80, 76, 76, 76, 59, 65, 61, 67],
+             
+             15:[47, 38, 43, 79, 79, 79, 59, 62, 68],
+             
+             16:[47, 51, 53, 43, 38, 79, 80, 81, 79, 79, 59, 61, 67, 69, 63],
+             
+             17:[45, 35, 40, 75, 75, 75, 63, 65, 59],
+             
+             18:[45, 52, 40, 48, 35, 74, 81, 74, 80, 74, 62, 64, 67, 69, 63],
+             
+             19:[40, 45, 35, 74, 74, 74, 60, 62, 66],
+             
+             20:[47, 37, 51, 43, 78, 78, 80, 78, 66, 60, 61, 65],
+             
+             21:[39, 48, 44, 34, 73, 80, 73, 73, 69, 63, 59, 62],
+             
+             22:[55, 53, 56, 34, 44, 49, 39, 82, 81, 83, 73, 73, 80, 73, 59, 61, 67, 61, 59, 64, 68],
+             
+             23:[45, 41, 35, 75, 75, 75, 60, 66, 65],
+             
+             24:[39, 34, 44, 72, 72, 72, 65, 60, 67],
+             
+             25:[46, 41, 36, 76, 76, 76, 65, 70, 68],
+             
+             26:[50, 47, 38, 43, 80, 79, 79, 79, 68, 70, 63, 68],
+             
+             27:[40, 49, 45, 35, 74, 80, 74, 74, 60, 66, 64, 63],
+             
+             28:[46, 41, 36, 76, 76, 76, 69, 70, 67],
+             
+             29:[45, 35, 40, 74, 74, 74, 64, 66, 67],
+             
+             30:[37, 42, 47, 78, 78, 78, 60, 64, 67],
+             
+             31:[42, 36, 46, 77, 77, 77, 62, 69, 61],
+             
+             32:[-1],
+             
+             33:[13, 8, 72, 59],
+             
+             34:[12, 4, 21, 24, 22, 6, 72, 73, 73, 60, 61, 62],
+             
+             35:[1, 17, 29, 18, 10, 23, 19, 27, 75, 75, 74, 74, 64, 65, 66, 63],
+             
+             36:[14, 7, 5, 28, 31, 25, 76, 77, 76, 67, 69, 68],
+             
+             37:[2, 30, 11, 9, 20, 3, 77, 78, 78, 70, 60, 61],
+             
+             38:[13, 0, 16, 12, 15, 26, 72, 79, 79, 64, 62, 63],
+             
+             39:[24, 4, 6, 8, 21, 22, 72, 73, 73, 65, 69, 68],
+             
+             40:[19, 1, 18, 27, 17, 29, 74, 75, 74, 60, 59, 67],
+             
+             41:[23, 25, 14, 10, 28, 5, 75, 76, 76, 66, 70, 61],
+             
+             42:[9, 7, 11, 31, 2, 30, 77, 77, 78, 62, 63, 64],
+             
+             43:[16, 20, 15, 0, 3, 26, 79, 78, 79, 69, 65, 68],
+             
+             44:[6, 8, 24, 22, 4, 12, 13, 21, 73, 72, 72, 73, 70, 66, 67, 59],
+             
+             45:[23, 10, 19, 27, 1, 17, 18, 29, 75, 75, 74, 74, 60, 63, 62, 64],
+             
+             46:[25, 28, 9, 31, 14, 5, 7, 2, 76, 76, 77, 77, 65, 69, 68, 61],
+             
+             47:[15, 20, 26, 3, 16, 11, 0, 30, 79, 78, 79, 78, 59, 66, 70, 67],
+             
+             48:[13, 18, 21, 1, 80, 80, 63, 69],
+             
+             49:[10, 22, 27, 12, 80, 80, 66, 64],
+             
+             50:[11, 5, 26, 9, 80, 80, 68, 67],
+             
+             51:[7, 16, 14, 20, 80, 80, 59, 61],
+             
+             52:[5, 13, 11, 18, 81, 81, 69, 64],
+             
+             53:[22, 7, 10, 16, 81, 81, 61, 67],
+             
+             54:[13, 11, 82, 63],
+             
+             55:[22, 7, 82, 59],
+             
+             56:[13, 22, 83, 67],
+             
+             57:[11, 7, 84, 69],
+             
+             58:[-1],
+             
+             59:[55, 51, 47, 44, 40, 33, 82, 80, 79, 73, 75, 72, 22, 7, 15, 22, 1, 13, 7, 14, 16, 21, 17, 8],
+             
+             60:[45, 40, 37, 34, 75, 74, 78, 72, 23, 19, 30, 12, 1, 27, 20, 24],
+             
+             61:[53, 34, 51, 41, 46, 37, 81, 73, 80, 76, 77, 78, 22, 4, 16, 14, 31, 11, 10, 22, 20, 5, 2, 3],
+             
+             62:[38, 45, 42, 34, 79, 74, 77, 73, 0, 19, 9, 21, 15, 18, 31, 6],
+             
+             63:[45, 54, 48, 42, 38, 35, 75, 82, 80, 77, 79, 74, 10, 13, 13, 7, 16, 18, 17, 11, 21, 2, 26, 27],
+             
+             64:[38, 35, 42, 49, 45, 52, 72, 75, 78, 80, 74, 81, 13, 1, 11, 22, 27, 13, 12, 10, 30, 12, 29, 18],
+             
+             65:[46, 39, 35, 43, 76, 72, 75, 78, 25, 24, 17, 20, 14, 8, 23, 3],
+             
+             66:[47, 41, 44, 49, 35, 78, 75, 72, 80, 74, 20, 23, 8, 10, 29, 11, 10, 12, 27, 19],
+             
+             67:[56, 44, 53, 47, 50, 40, 36, 83, 72, 81, 78, 80, 74, 76, 13, 24, 7, 3, 5, 18, 14, 22, 13, 16, 30, 9, 29, 28],
+             
+             68:[50, 39, 46, 43, 36, 80, 73, 77, 79, 76, 11, 6, 9, 15, 5, 26, 22, 7, 26, 25],
+             
+             69:[52, 57, 39, 46, 43, 48, 36, 81, 84, 73, 76, 79, 80, 77, 5, 11, 4, 28, 16, 18, 7, 11, 7, 21, 5, 0, 1, 31],
+             
+             70:[44, 37, 41, 47, 73, 77, 76, 79, 6, 2, 25, 26, 4, 9, 28, 0],
+             
+             71:[-1],
+             
+             72:[38, 39, 34, 44, 44, 33, 64, 65, 60, 66, 67, 59, 13, 24, 12, 8, 24, 13, 12, 8, 24, 12, 13, 8],
+             
+             73:[39, 44, 34, 44, 39, 34, 69, 70, 61, 59, 68, 62, 4, 6, 4, 22, 6, 21, 21, 4, 22, 21, 22, 6],
+             
+             74:[40, 45, 45, 35, 40, 35, 60, 62, 64, 66, 67, 63, 19, 19, 27, 29, 18, 18, 27, 18, 29, 19, 29, 27],
+             
+             75:[45, 45, 41, 35, 35, 40, 60, 63, 66, 64, 65, 59, 23, 10, 23, 1, 17, 1, 1, 17, 10, 10, 23, 17],
+             
+             76:[46, 46, 41, 41, 36, 36, 65, 69, 70, 61, 67, 68, 25, 28, 25, 14, 14, 5, 14, 5, 28, 5, 28, 25],
+             
+             77:[37, 42, 42, 46, 36, 46, 70, 62, 63, 68, 69, 61, 2, 9, 7, 9, 7, 31, 9, 31, 2, 7, 31, 2],
+             
+             78:[47, 37, 42, 43, 47, 37, 66, 60, 64, 65, 67, 61, 20, 30, 11, 20, 3, 11, 11, 20, 30, 3, 30, 3],
+             
+             79:[47, 38, 43, 47, 38, 43, 59, 62, 69, 70, 63, 68, 15, 0, 16, 26, 16, 15, 16, 15, 0, 0, 26, 26],
+             
+             80:[51, 51, 48, 49, 50, 49, 50, 48, 59, 61, 63, 66, 68, 64, 67, 69, 7, 16, 13, 10, 11, 22, 5, 18, 14, 20, 21, 27, 26, 12, 9, 1],
+             
+             81:[53, 52, 53, 52, 61, 69, 67, 64, 22, 5, 7, 13, 10, 11, 16, 18],
+             
+             82:[55, 54, 59, 63, 22, 13, 7, 11],
+             
+             83:[56, 67, 13, 22],
+             
+             84:[57, 69, 11, 7],
+             
+            }
+        
+
+        var screenWidth = window.innerWidth;
+        var screenHeight = window.innerHeight;
+        var margin = {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0
+            },
+
+        width = screenWidth - margin.left - margin.right,
+        height = screenHeight - margin.top - margin.bottom;
+
+
+        var ellipse_koefX = 1.2
+        var ellipse_koefY = 1.0
+        var global_arc_koefX = ellipse_koefX * 1.1
+        var global_arc_koefY = ellipse_koefY * 1.1
+
+        var part_bounces = {
+            "0": [10000, -1],
+            "1": [10000, -1],
+            "2": [10000, -1],
+            "3": [10000, -1]
+        }
+        var arcOut = {
+            firstLoc: "",
+            radLoc: "",
+            secLoc: "",
+            firstSmallLoc: "",
+            secSmallLoc: "",
+            radSmallLoc: ""
+        }
+
+        //параметры отрисовки
+        var outerRadius = Math.min(height / (2 * global_arc_koefY), width / (2 * ellipse_koefX * global_arc_koefX))
+        var innerRadius = outerRadius * 0.75
+
+        var out_arcs = []
+        
+        var fontSizeInnerSlice = 1 / 5.0 * (outerRadius - innerRadius)
+        var fontSizeOutterSlice = (global_arc_koefX - 1) * innerRadius * 1 / 3.5
+        var fontSizeInside =  1 / 7.2 * (outerRadius - innerRadius)
+   
+        wd = 1.5 * innerRadius
+        hd = 1.3 * innerRadius
+
+
+        //параметры к
+        var svg = d3.select("#donutVisual").append("svg")
+            .attr("width", (width + margin.left + margin.right))
+            .attr("height", (height + margin.top + margin.bottom))
+            .attr("color", "#debcd1")
+            .append("g").attr("class", "wrapper")
+            .attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")");
+
+
+        //Create an arc function   
+        var arc = d3.svg.arc()
+            .innerRadius(innerRadius)
+            .outerRadius(outerRadius);
+
+
+        //Turn the pie chart 90 degrees counter clockwise, so it starts at the left    
+        var pie = d3.layout.pie()
+            .startAngle(-180 * Math.PI / 180 + Math.PI / 6)
+            .endAngle(-180 * Math.PI / 180 + Math.PI / 6 + 2 * Math.PI)
+            .value(function (d) {
+                return d.value;
+            })
+            .padAngle(.01)
+            .sort(null);
+
+
+        //Some random data
+
+
+        function function_get_games_array(Array) {
+            var gms = []
+            for (i = 0; i < Array.length; i++) {
+                gms.push(games[Array[i]])
+            }
+            return gms;
+        }
+
+
+        function getTournament(index) {
+            window.location.href = window.location.protocol + '//' + window.location.host + "/worldcup?tournamentId=" + index;
+
+        }
+
+
+        function restore_colors() {
+            for (i = 0; i < visualDonatData.length; i++) {
+                d3.select("#ArcEllipse" + i).style("fill", visualDonatData[i]["color"]);
+            }
+        }
+
+        function restore_colors_outArcs() {
+            for (i = 0; i < outArcsData.length; i++) {
+                d3.select("#outArc" + i).style("fill", outArcsData[i]["color"]);
+            }
+        }
+
+        function setClicked(Array) {
+            for (i = 0; i < Array.length; i++) {
+                d3.select("#ArcEllipse" + Array[i]).style("fill", "#debcd1");
+            }
+        }
+
+
+        //дял каждой части находим первый и последний кусочек     
+        function getPartBounces(visualDonatData) {
+            for (i = 0; i < visualDonatData.length; i++) {
+                cur_group = visualDonatData[i]["id_group"];
+                if (cur_group == -1) {
+                    continue;
+                }
+                cur_group_left = part_bounces[cur_group][0]
+                cur_group_right = part_bounces[cur_group][1]
+                if (i < cur_group_left) {
+                    part_bounces[cur_group][0] = i
+                }
+                if (i > cur_group_right) {
+                    part_bounces[cur_group][1] = i
+                }
+            }
+        }
+
+        getPartBounces(visualDonatData);
+
+
+        ////////////////////////////////////////////////////////////// 
+        //////////////////// Create visualDonat Chart ////////////////////// 
+        ////////////////////////////////////////////////////////////// 
+        //Create the visualDonat slices and also the invisible arcs for the text 
+        svg.selectAll(".visualDonatArcs")
+            .data(pie(visualDonatData))
+            .enter().append("path")
+            .attr("class", "visualDonatArcs")
+            .attr("d", arc)
+            .attr("id", "visualDonatArcs")
+            .style("fill", function (d, i) {
+                return "none";
+            })
+            .each(function (d, i) {
+                //Search pattern for everything between the start and the first capital L
+
+                //console.log((width / 2 + margin.left))
+                //между М и A -->  преобразуем
+                //между A и 0 0, 1 по X увеличивам на K
+                //между 0 0,1 и L  преобразуем
+                //M -1.2879629948845253, 221.49625538894287       //первая точка на внешнем радиусе
+                //A 221.5, 221.5                                  //внешний радиус
+                //0 0,1 -14.203496816146563, 221.04413739837958   //вторая точка на внешнем радиусе
+                //L -7.9099938637859095, 131.26188326043044       //первая точка на внутреннем радиусе   
+                //A 131.5, 131.5                                  //внутренний радиус
+                //0 0,0 -1.2879629948845304, 131.49369243930983Z  //вторая точка на внутреннем радиусе
+                var firstDotOuterEx = /M(.*?)A/;
+                var radOuterEx = /A(.*?)0 0,1/;
+                var secondDotOuterEx = /0 0,1(.*?)L/;
+                var firstInnerDotEx = /L(.*?)A/;
+                var radSmallElEx = /A(.*?)0 0,0/
+                var secondSmallDotEx = /0 0,0(.*?)Z/;
+
+
+                firstLoc = firstDotOuterEx.exec(d3.select(this).attr("d"))[1]
+                radLoc = radOuterEx.exec(d3.select(this).attr("d"))[1]
+
+                secLoc = secondDotOuterEx.exec(d3.select(this).attr("d"))[1]
+                firstSmallLoc = firstInnerDotEx.exec(d3.select(this).attr("d"))[1]
+
+                secSmallLoc = secondSmallDotEx.exec(d3.select(this).attr("d"))[1]
+                radSmallLoc = radSmallElEx.exec(d3.select(this).attr("d"))[1]
+
+
+                var first = firstLoc.split(",");
+                var second = secLoc.split(",");
+                var rad = radLoc.split(",")
+                
+                //точки и радиус для внутренней арки
+                newFirst = getEllipseCoords(parseFloat(first[0]), parseFloat(first[1]), ellipse_koefX, ellipse_koefY, outerRadius).join(",")
+                newLast = getEllipseCoords(parseFloat(second[0]), parseFloat(second[1]), ellipse_koefX, ellipse_koefY, outerRadius).join(",")
+                newRad = [rad[0] * ellipse_koefX, rad[1] * ellipse_koefY].join(",")
+            
+                //точки для внешней арки
+                newFirstOut = getEllipseCoords(parseFloat(first[0]), parseFloat(first[1]), global_arc_koefX, global_arc_koefY, outerRadius).join(",")
+                newSecOut = getEllipseCoords(parseFloat(second[0]), parseFloat(second[1]), global_arc_koefX, global_arc_koefY, outerRadius).join(",")
+            
+            
+                FirstPath = "M" + newFirst + "A" + newRad + " 0 0, 1" + newLast
+                ellipseInnerArc = FirstPath + "L" + firstSmallLoc + "A" + radSmallLoc + "0 0,0" + secSmallLoc + "Z"
+                
+                image_width = getDistance(firstSmallLoc.split(","), secSmallLoc.split(","))
+                
+                //центры долек, чтобы писать в центре
+                centreSec = getPointDivided(newLast.split(","), newFirst.split(",")).join(",")
+                centreFirst = getPointDivided(firstSmallLoc.split(","), secSmallLoc.split(",")).join(",")
+                centre_path_length = getDistance(centreFirst.split(","), centreSec.split(","))
+            
+                k = image_width * 1.0 / centre_path_length //коэффицент пути
+                //k = 0
+                nextPointCentre = getPointDivided(centreFirst.split(","), centreSec.split(","), k ).join(",")
+                console.log('nextPointCentre ' + nextPointCentre)
+            
+                if (visualDonatData[i]["id_group"] != 0) { //разные направления пути для разных видов долек
+                    textArc = "M" + newLast + "L" + firstSmallLoc + "Z"
+                    textArcCentre = "M " + centreFirst + " L" +   centreSec
+                } else {
+                    textArc = "M" + secSmallLoc + "L" + newFirst + "Z"
+                    textArcCentre = "M" + centreSec + "L" + nextPointCentre + "Z"
+                }
+
+
+                console.log("ellipseInnerArc " + ellipseInnerArc)
+                console.log("textArcCentre " + textArcCentre)
+
+                newRadOut = [global_arc_koefX * rad[0], global_arc_koefY * rad[1]].join(",")
+                
+                size_sec = getDistance(centreSec.split(","), centreFirst.split(","))     //size of sector
+                angle = getRotateAngle(firstSmallLoc.split(","), secSmallLoc.split(",")) //угол поворота для смещения картинки
+         
+                //если текущий кусок самый крайний в группе
+                cur_group = visualDonatData[i]["id_group"]
+                if (cur_group != -1) {
+                    if (part_bounces[cur_group][0] == i) {
+                        var a = Object.assign({}, arcOut)
+                        a["firstLoc"] = newFirstOut
+                        a["radLoc"] = newRadOut
+                        a["firstSmallLoc"] = newFirst
+                        a["radSmallLoc"] = newRad
+                        out_arcs.push(a)
+                    }
+                    if (part_bounces[cur_group][1] == i) {
+                        out_arcs[cur_group]["secLoc"] = newSecOut
+                        out_arcs[cur_group]["secSmallLoc"] = newLast
+                    }
+                }
+                //"M -94 179 L -68 130  L 10 25 L -94 179"
+                
+             
+            
+                svg.append("path")
+                    .attr("class", "hiddenvisualDonatArcs")
+                    .attr("id", "visualDonatArc" + i)
+                    .attr("d", textArc)
+                    .style("fill", visualDonatData[i]["color"]);
+                
+                //Маленькие внутринние дольки
+                
+                svg.append("path")
+                    .attr("class", "slice_ellipse")
+                    .attr("id", "ArcEllipse" + i)
+                    //.attr("stroke-width", 50)
+                    //.attr("stroke", "black")
+                    .attr("d", ellipseInnerArc)
+                    .style("fill", visualDonatData[i]["color"])
+                    .on("mouseover", function () {
+                        restore_colors()
+                        d3.select(this).style("fill", "#debcd1");
+                        setClicked(click_events[i]);
+                       
+                    })
+                    .on("mouseout", function (d, i) {
+                        restore_colors()
+                        //d3.select(this).style("fill", visualDonatData[i]["color"]);
+                    });
+
+                svg.append("path")
+                    .attr("class", "hiddenvisualDonatArcsCentre")
+                    .attr("id", "visualDonatArcCentre" + i)
+                    .attr("stroke", "black")
+                    .attr("d", textArcCentre)
+                    .style("fill", "none"); 
+               
+               svg.append("image")
+                    .attr("width",
+                        image_width)
+                    .attr("height", image_width)
+                    .attr("x", firstSmallLoc.split(",")[0])
+                    .attr("y", firstSmallLoc.split(",")[1])
+                    .attr("id", "rect" + i)
+                    .attr("transform", function () {
+                        a = 180 + angle
+                        if (visualDonatData[i]["id_group"] == 0) {
+                            //a = angle 
+                            return "rotate(" + a + ", " + firstSmallLoc.split(",")[0] + " ," + firstSmallLoc.split(",")[1] + ")" 
+                                //+ "translate(-" + image_width * Math.sin(a) + ",0)"
+                        } else {
+                            return ""
+                        }
+
+                    })
+                    .attr("xlink:href", function () {
+                        //console.log("")
+                        if (visualDonatData[i]["id_group"] == 0) {
+                            console.log(i + " " + angle)
+                            console.log(visualDonatData[i])
+                            return visualDonatData[i]["image"]
+                        }
+                    });
+                //Append the label names on the outside
+                
+
+            });
+    
+    //текста добавляем отдельно. Это все, что в центре         
+    svg.selectAll(".visualDonatTextCentre")
+                    .data(pie(visualDonatData))
+                    .enter().append("text")
+                    .style("font-size", fontSizeInnerSlice / 1.2 + "px")
+                    .style("font-family", "dusha")
+                    .style("fill", "#ffffff")
+                    .attr("class", "visualDonatTextCentre")
+                    .attr("pointer-events", "none")
+                    .append("textPath")
+                    .attr("href", function (d, i) {
+                        return "#visualDonatArcCentre" + i;
+                    })
+                    .attr("startOffset", function (d, i) {
+                        if (d.data.id_group == 0) {
+                            return "50%";
+                        } else {
+                            return "0%";
+                        }
+                    })
+                    .attr("text-anchor", function (d, i) {
+                        if (d.data.id_group == 0) {
+                            return "end";
+                        } else {
+                            return "start";
+                        }
+                    })
+                    //.attr("xlink:href",function(d) {return d.data.image;})
+                    .text(function (d, i) {
+                        if (d.data.id_group == 2) {
+                            return d.data.name.split(";")[1].toUpperCase();
+                        } else {
+                            if (d.data.id_group == 0) {
+                                return d.data.name;
+                            } else {
+                                return "";
+                            }
+                        }
+                    })
+
+             
+    </script>
+
+    
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/index.js"></script>
+    
+
+
+
+<script>
+     var  myDiv2 = document.getElementById("my-icon-select");
+        myDiv2.id = "myDiv2";  
+    //Create and append select list
+      var selectList = document.createElement("select");
+      selectList.id = "mySelect";
+      selectList.style.width =  wd + "px";    
+      selectList.style.fontSize = fontSizeInnerSlice * 1.5
+    
+      myDiv2.appendChild(selectList);
+
+     //Create and append the options
+     for (var i = 0; i < tournaments.length; i++) {
+         var option = document.createElement("option");
+         option.value = tournaments[i]['value'];
+         option.text = tournaments[i]['text'];
+         img = "{{ url_for('static', filename= 'png/wc_icons/') }}" + option.value + ".png";
+         option.style = img;
+         selectList.appendChild(option);
+     }
+     selectList.selectedIndex = 19                
+              
+      $('#mySelect').change(function () {
+          var optionSelected = document.getElementById('mySelect');
+          getTournament(optionSelected.value)
+
+    
+ });        
+</script>
+
+</body>
+
+</html>
+
+

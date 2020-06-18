@@ -3,9 +3,8 @@ import datetime
 import time
 import math
 from threading import Thread
-import matplotlib.pyplot as plt
 import numpy as np
-from numpy import inf
+
 
 
 def separate_n(data, n):

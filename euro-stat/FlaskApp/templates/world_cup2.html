@@ -1,0 +1,306 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>World-cup-visual</title>
+
+    <!-- D3.js -->
+
+    <script src="{{
+  url_for('static', filename='js/d3.min.js') }}"></script>
+
+    <script src="{{
+  url_for('static', filename='js/d3pie.min.js') }}"></script>
+
+    <script src="{{
+  url_for('static', filename='js/jquery-1.9.0.js') }}"></script>
+
+    <script src="{{
+  url_for('static', filename='js/topojson.min.js') }}"></script>
+
+
+    <script src="{{
+  url_for('static', filename='js/datamaps.world.min.js') }}"></script>
+
+    <script src="{{
+  url_for('static', filename='js/go.js') }}"></script>
+
+   <script src="{{
+  url_for('static', filename='js/logic.js') }}"></script>
+    
+    <script src="{{
+  url_for('static', filename='js/visual-d3.js') }}"></script> 
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/normalize.min.css') }}">
+
+    <link rel="icon" href="{{ url_for('static', filename= 'png/world_cup.png') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style_menu.css') }}">
+
+    <script src="{{url_for('static', filename='js/globalize.min.js' ) }}"></script>
+    <script src="{{url_for('static', filename='js/dx.chartjs.js' ) }}"></script>
+    <script src="{{url_for('static', filename='js/knockout-3.0.0.js' ) }}"></script>
+    
+    
+
+</head>
+
+<body>
+
+    <div id="donutVisual" style="position: absolute;"></div>
+    <div id="my-icon-select" style="position: absolute;"></div>
+
+
+    <script>
+         var tournaments = [
+             {% for t in tournaments %} {
+                text: "{{t['caption']}}",
+                value: {{t['id']}},
+                selected:true,
+                imageSrc: "{{t['Url']}}"  
+            },
+             {% endfor %}
+        ]
+
+        var show_games = {
+            {% for d in slice_name %} 
+            {{d['key']}}:{{d['value']}},
+            {% endfor %} 
+        }
+
+        var games_playoff = [
+        {% for d in games_playoff%} { 
+             "key": "{{d['key']}}",
+             "parent": "{{d['parent']}}",                  
+             "teamHome": "{{d['teamHome']}}",
+             "teamAway": "{{d['teamAway']}}",
+             "goalsHomeTeam": "{{d['goalsHomeTeam']}}",
+             "goalsAwayTeam": "{{d['goalsAwayTeam']}}"
+        },
+         {% endfor %} 
+        ]     
+
+        var games = [
+            {% for d in games_clear %} { 
+                 "teamHome": "{{d['teamHome']}}",
+                 "teamAway": "{{d['teamAway']}}",
+                 "result": "{{d['result']}}",
+                 "city": "{{d['city']}}", 
+                 "stadium": "{{d['stadium']}}",  
+                 "date": "{{d['date']}}",  
+                 "time": "{{d['time']}}",
+                 "goalsHomeTeam": "{{d['goalsHomeTeam']}}",  
+                 "goalsAwayTeam": "{{d['goalsAwayTeam']}}"  
+            },
+             {% endfor %} 
+            ]
+
+        var outArcsData = [
+            {% for d in outGroups %} {
+                "name": "{{d['name']}}",
+                 "color": "{{d['color']}}"
+
+            },
+            {% endfor %} 
+        ]
+
+        var visualDonatData = [
+            {% for d in teams %} {
+                "name": "{{d['name']}}",
+                "value": {{d['value']}},
+                "color": "{{d['color']}}",
+                "image": "{{d['crestUrl']}}",    
+                "id_group": "{{d['id_group']}}"         
+            },
+             {% endfor %}
+             {
+                "name": "",
+                "value": {{space}},
+                "color":"none",
+                "id_group":-1      
+            },     
+            {% for d in rounds %} {
+                "name": "{{d['name']}}",
+                "value": {{d['value']}},
+                "color": "{{d['color']}}",
+                "id_group": "{{d['id_group']}}"            
+            },
+             {% endfor %}
+             {
+                "name": "",
+                "value": {{space}},
+                "color":"none",
+                "id_group":-1     
+            }, 
+             {% for d in places %} {
+                "name": "{{d['name']}}",
+                "value": {{d['value']}},
+                "color": "{{d['color']}}" ,
+                "id_group": "{{d['id_group']}}"
+
+            },
+             {% endfor %}      
+              {
+                "name": "",
+                "value": {{space}},
+                "color":"none",
+                "id_group":-1     
+            },
+            {% for d in stages %} {
+                "name": "{{d['title']}}",
+                "value": {{d['value']}},
+                "color": "{{d['color']}}" ,
+                "id_group": "{{d['id_group']}}"            
+            },
+            {% endfor %}    
+            {
+                "name": "",
+                "value": {{space}},
+                "color":"none",
+                "id_group":-1     
+            }, 
+
+        ];  
+
+        var click_events = {
+            {% for d in click_events %} 
+             {{d['key']}}:{{d['value']}},
+            {% endfor %} 
+        }     
+        
+        var screenWidth = window.innerWidth;
+        var screenHeight = window.innerHeight;
+        var margin = {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0
+            },
+
+        width = screenWidth - margin.left - margin.right,
+        height = screenHeight - margin.top - margin.bottom;
+
+
+        var ellipse_koefX = 1.2
+        var ellipse_koefY = 1.0
+        var global_arc_koefX = ellipse_koefX * 1.1
+        var global_arc_koefY = ellipse_koefY * 1.1
+
+        
+        //параметры отрисовки
+        var outerRadius = Math.min(height / (2 * global_arc_koefY), width / (2 * ellipse_koefX * global_arc_koefX))
+        var innerRadius = outerRadius * 0.75
+
+        var out_arcs = []
+        
+        var fontSizeInnerSlice = 1 / 5.0 * (outerRadius - innerRadius)
+        var fontSizeOutterSlice = (global_arc_koefX - 1) * innerRadius * 1 / 3.5
+        var fontSizeInside =  1 / 7.2 * (outerRadius - innerRadius)
+   
+        wd = 1.5 * innerRadius
+        hd = 1.3 * innerRadius
+        
+        var fontFamily = "bellota"     
+
+        //параметры к
+        var svg = d3.select("#donutVisual").append("svg")
+            .attr("width", (width + margin.left + margin.right))
+            .attr("height", (height + margin.top + margin.bottom))
+            .attr("color", "#debcd1")
+            .append("g").attr("class", "wrapper")
+            .attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")");
+
+
+        //Create an arc function   
+        var arc = d3.svg.arc()
+            .innerRadius(innerRadius)
+            .outerRadius(outerRadius);
+
+
+        //Turn the pie chart 90 degrees counter clockwise, so it starts at the left    
+        var pie = d3.layout.pie()
+            .startAngle(-180 * Math.PI / 180 + Math.PI / 6)
+            .endAngle(-180 * Math.PI / 180 + Math.PI / 6 + 2 * Math.PI)
+            .value(function (d) {
+                return d.value;
+            })
+            .padAngle(.01)
+            .sort(null);
+
+
+        //Some random data
+
+
+        function function_get_games_array(Array) {
+            var gms = []
+            for (i = 0; i < Array.length; i++) {
+                gms.push(games[Array[i]])
+            }
+            return gms;
+        }
+
+
+        function getTournament(index) {
+            window.location.href = window.location.protocol + '//' + window.location.host + "/worldcup?tournamentId=" + index;
+
+        }
+
+
+
+        createDonatDiagram(visualDonatData, pie, arc, global_arc_koefX, global_arc_koefY, outerRadius, fontSizeInnerSlice, "visualDonatArcs", "visualDonatArc", "visualDonatText",  fontFamily )      
+    
+</script>
+
+    
+   <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+   <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+    
+    
+
+
+
+<script>
+    var  myDiv2 = document.getElementById("my-icon-select");
+    myDiv2.id = "myDiv2";  
+    //Create and append select list
+    var selectList = document.createElement("select");
+    selectList.id = "mySelect";
+    selectList.style.width =  wd + "px";    
+    selectList.style.fontSize = fontSizeInnerSlice * 1.5
+    selectList.style.fontFamily =  fontFamily 
+    
+    myDiv2.appendChild(selectList);
+
+    //Create and append the options
+    for (var i = 0; i < tournaments.length; i++) {
+        var option = document.createElement("option");
+        option.style.fontFamily =  fontFamily 
+    
+        option.value = tournaments[i]['value'];
+        option.text = tournaments[i]['text'];
+        img = "{{ url_for('static', filename= 'png/wc_icons/') }}" + option.value + ".png";
+        option.style = img;
+        selectList.appendChild(option);
+    }
+    selectList.selectedIndex = {{tournamentPos}}            
+
+    $('#mySelect').change(function () {
+        var optionSelected = document.getElementById('mySelect');
+        getTournament(optionSelected.value)
+    });        
+</script>
+
+</body>
+
+</html>
+
+

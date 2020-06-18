@@ -1,0 +1,491 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>World-cup-visual</title>
+
+    <!-- D3.js -->
+
+    <script src="{{
+  url_for('static', filename='js/d3.min.js') }}"></script>
+
+    <script src="{{
+  url_for('static', filename='js/d3pie.min.js') }}"></script>
+
+    <script src="{{
+  url_for('static', filename='js/jquery-1.9.0.js') }}"></script>
+
+    <script src="{{
+  url_for('static', filename='js/topojson.min.js') }}"></script>
+
+
+    <script src="{{
+  url_for('static', filename='js/datamaps.world.min.js') }}"></script>
+
+    <script src="{{
+  url_for('static', filename='js/go.js') }}"></script>
+
+   <script src="{{
+  url_for('static', filename='js/logic.js') }}"></script>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/normalize.min.css') }}">
+
+    <link rel="icon" href="{{ url_for('static', filename= 'png/world_cup.png') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style_menu.css') }}">
+
+    <script src="{{url_for('static', filename='js/globalize.min.js' ) }}"></script>
+    <script src="{{url_for('static', filename='js/dx.chartjs.js' ) }}"></script>
+    <script src="{{url_for('static', filename='js/knockout-3.0.0.js' ) }}"></script>
+    
+    
+
+</head>
+
+<body>
+
+    <div id="donutVisual" style="position: absolute;"></div>
+    <div id="my-icon-select" style="position: absolute;"></div>
+
+
+    <script>
+         var tournaments = [
+             {% for t in tournaments %} {
+                text: "{{t['caption']}}",
+                value: {{t['id']}},
+                selected:true,
+                imageSrc: "{{t['Url']}}"  
+            },
+             {% endfor %}
+        ]
+
+        var show_games = {
+            {% for d in slice_name %} 
+            {{d['key']}}:{{d['value']}},
+            {% endfor %} 
+        }
+
+        var games_playoff = [
+        {% for d in games_playoff%} { 
+             "key": "{{d['key']}}",
+             "parent": "{{d['parent']}}",                  
+             "teamHome": "{{d['teamHome']}}",
+             "teamAway": "{{d['teamAway']}}",
+             "goalsHomeTeam": "{{d['goalsHomeTeam']}}",
+             "goalsAwayTeam": "{{d['goalsAwayTeam']}}"
+        },
+         {% endfor %} 
+        ]     
+
+        var games = [
+            {% for d in games_clear %} { 
+                 "teamHome": "{{d['teamHome']}}",
+                 "teamAway": "{{d['teamAway']}}",
+                 "result": "{{d['result']}}",
+                 "city": "{{d['city']}}", 
+                 "stadium": "{{d['stadium']}}",  
+                 "date": "{{d['date']}}",  
+                 "time": "{{d['time']}}",
+                 "goalsHomeTeam": "{{d['goalsHomeTeam']}}",  
+                 "goalsAwayTeam": "{{d['goalsAwayTeam']}}"  
+            },
+             {% endfor %} 
+            ]
+
+        var outArcsData = [
+            {% for d in outGroups %} {
+                "name": "{{d['name']}}",
+                 "color": "{{d['color']}}"
+
+            },
+            {% endfor %} 
+        ]
+
+        var visualDonatData = [
+            {% for d in teams %} {
+                "name": "{{d['name']}}",
+                "value": {{d['value']}},
+                "color": "{{d['color']}}",
+                "image": "{{d['crestUrl']}}",    
+                "id_group": "{{d['id_group']}}"         
+            },
+             {% endfor %}
+             {
+                "name": "",
+                "value": {{space}},
+                "color":"none",
+                "id_group":-1      
+            },     
+            {% for d in rounds %} {
+                "name": "{{d['name']}}",
+                "value": {{d['value']}},
+                "color": "{{d['color']}}",
+                "id_group": "{{d['id_group']}}"            
+            },
+             {% endfor %}
+             {
+                "name": "",
+                "value": {{space}},
+                "color":"none",
+                "id_group":-1     
+            }, 
+             {% for d in places %} {
+                "name": "{{d['name']}}",
+                "value": {{d['value']}},
+                "color": "{{d['color']}}" ,
+                "id_group": "{{d['id_group']}}"
+
+            },
+             {% endfor %}      
+              {
+                "name": "",
+                "value": {{space}},
+                "color":"none",
+                "id_group":-1     
+            },
+            {% for d in stages %} {
+                "name": "{{d['title']}}",
+                "value": {{d['value']}},
+                "color": "{{d['color']}}" ,
+                "id_group": "{{d['id_group']}}"            
+            },
+            {% endfor %}    
+            {
+                "name": "",
+                "value": {{space}},
+                "color":"none",
+                "id_group":-1     
+            }, 
+
+        ];  
+
+        var click_events = {
+            {% for d in click_events %} 
+             {{d['key']}}:{{d['value']}},
+            {% endfor %} 
+        }     
+        
+        var screenWidth = window.innerWidth;
+        var screenHeight = window.innerHeight;
+        var margin = {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0
+            },
+
+        width = screenWidth - margin.left - margin.right,
+        height = screenHeight - margin.top - margin.bottom;
+
+
+        var ellipse_koefX = 1.2
+        var ellipse_koefY = 1.0
+        var global_arc_koefX = ellipse_koefX * 1.1
+        var global_arc_koefY = ellipse_koefY * 1.1
+
+        var part_bounces = {
+            "0": [10000, -1],
+            "1": [10000, -1],
+            "2": [10000, -1],
+            "3": [10000, -1]
+        }
+        var arcOut = {
+            firstLoc: "",
+            radLoc: "",
+            secLoc: "",
+            firstSmallLoc: "",
+            secSmallLoc: "",
+            radSmallLoc: ""
+        }
+
+        //параметры отрисовки
+        var outerRadius = Math.min(height / (2 * global_arc_koefY), width / (2 * ellipse_koefX * global_arc_koefX))
+        var innerRadius = outerRadius * 0.75
+
+        var out_arcs = []
+        
+        var fontSizeInnerSlice = 1 / 5.0 * (outerRadius - innerRadius)
+        var fontSizeOutterSlice = (global_arc_koefX - 1) * innerRadius * 1 / 3.5
+        var fontSizeInside =  1 / 7.2 * (outerRadius - innerRadius)
+   
+        wd = 1.5 * innerRadius
+        hd = 1.3 * innerRadius
+
+
+        //параметры к
+        var svg = d3.select("#donutVisual").append("svg")
+            .attr("width", (width + margin.left + margin.right))
+            .attr("height", (height + margin.top + margin.bottom))
+            .attr("color", "#debcd1")
+            .append("g").attr("class", "wrapper")
+            .attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")");
+
+
+        //Create an arc function   
+        var arc = d3.svg.arc()
+            .innerRadius(innerRadius)
+            .outerRadius(outerRadius);
+
+
+        //Turn the pie chart 90 degrees counter clockwise, so it starts at the left    
+        var pie = d3.layout.pie()
+            .startAngle(-180 * Math.PI / 180 + Math.PI / 6)
+            .endAngle(-180 * Math.PI / 180 + Math.PI / 6 + 2 * Math.PI)
+            .value(function (d) {
+                return d.value;
+            })
+            .padAngle(.01)
+            .sort(null);
+
+
+        //Some random data
+
+
+        function function_get_games_array(Array) {
+            var gms = []
+            for (i = 0; i < Array.length; i++) {
+                gms.push(games[Array[i]])
+            }
+            return gms;
+        }
+
+
+        function getTournament(index) {
+            window.location.href = window.location.protocol + '//' + window.location.host + "/worldcup?tournamentId=" + index;
+
+        }
+
+
+        function restore_colors() {
+            for (i = 0; i < visualDonatData.length; i++) {
+                d3.select("#ArcEllipse" + i).style("fill", visualDonatData[i]["color"]);
+            }
+        }
+
+        function restore_colors_outArcs() {
+            for (i = 0; i < outArcsData.length; i++) {
+                d3.select("#outArc" + i).style("fill", outArcsData[i]["color"]);
+            }
+        }
+
+        function setClicked(Array) {
+            for (i = 0; i < Array.length; i++) {
+                d3.select("#ArcEllipse" + Array[i]).style("fill", "#debcd1");
+            }
+        }
+
+
+        //дял каждой части находим первый и последний кусочек     
+        function getPartBounces(visualDonatData) {
+            for (i = 0; i < visualDonatData.length; i++) {
+                cur_group = visualDonatData[i]["id_group"];
+                if (cur_group == -1) {
+                    continue;
+                }
+                cur_group_left = part_bounces[cur_group][0]
+                cur_group_right = part_bounces[cur_group][1]
+                if (i < cur_group_left) {
+                    part_bounces[cur_group][0] = i
+                }
+                if (i > cur_group_right) {
+                    part_bounces[cur_group][1] = i
+                }
+            }
+        }
+
+        getPartBounces(visualDonatData);
+
+
+        ////////////////////////////////////////////////////////////// 
+        //////////////////// Create visualDonat Chart ////////////////////// 
+        ////////////////////////////////////////////////////////////// 
+        //Create the visualDonat slices and also the invisible arcs for the text 
+        svg.selectAll(".visualDonatArcs")
+            .data(pie(visualDonatData))
+            .enter().append("path")
+            .attr("class", "visualDonatArcs")
+            .attr("d", arc)
+            .attr("id", "visualDonatArcs")
+            .style("fill", function (d, i) {
+                return "none";
+            })
+            .each(function (d, i) {
+                //Search pattern for everything between the start and the first capital L
+
+                //console.log((width / 2 + margin.left))
+                //между М и A -->  преобразуем
+                //между A и 0 0, 1 по X увеличивам на K
+                //между 0 0,1 и L  преобразуем
+                //M -1.2879629948845253, 221.49625538894287       //первая точка на внешнем радиусе
+                //A 221.5, 221.5                                  //внешний радиус
+                //0 0,1 -14.203496816146563, 221.04413739837958   //вторая точка на внешнем радиусе
+                //L -7.9099938637859095, 131.26188326043044       //первая точка на внутреннем радиусе   
+                //A 131.5, 131.5                                  //внутренний радиус
+                //0 0,0 -1.2879629948845304, 131.49369243930983Z  //вторая точка на внутреннем радиусе
+                var firstDotOuterEx = /M(.*?)A/;
+                var radOuterEx = /A(.*?)0 0,1/;
+                var secondDotOuterEx = /0 0,1(.*?)L/;
+                var firstInnerDotEx = /L(.*?)A/;
+                var radSmallElEx = /A(.*?)0 0,0/
+                var secondSmallDotEx = /0 0,0(.*?)Z/;
+
+
+                firstLoc = firstDotOuterEx.exec(d3.select(this).attr("d"))[1]
+                radLoc = radOuterEx.exec(d3.select(this).attr("d"))[1]
+
+                secLoc = secondDotOuterEx.exec(d3.select(this).attr("d"))[1]
+                firstSmallLoc = firstInnerDotEx.exec(d3.select(this).attr("d"))[1]
+
+                secSmallLoc = secondSmallDotEx.exec(d3.select(this).attr("d"))[1]
+                radSmallLoc = radSmallElEx.exec(d3.select(this).attr("d"))[1]
+
+
+                var first = firstLoc.split(",");
+                var second = secLoc.split(",");
+                var rad = radLoc.split(",")
+                
+                //точки и радиус для внутренней арки
+                newFirst = getEllipseCoords(parseFloat(first[0]), parseFloat(first[1]), ellipse_koefX, ellipse_koefY, outerRadius).join(",")
+                newLast = getEllipseCoords(parseFloat(second[0]), parseFloat(second[1]), ellipse_koefX, ellipse_koefY, outerRadius).join(",")
+                newRad = [rad[0] * ellipse_koefX, rad[1] * ellipse_koefY].join(",")
+            
+                //точки для внешней арки
+                newFirstOut = getEllipseCoords(parseFloat(first[0]), parseFloat(first[1]), global_arc_koefX, global_arc_koefY, outerRadius).join(",")
+                newSecOut = getEllipseCoords(parseFloat(second[0]), parseFloat(second[1]), global_arc_koefX, global_arc_koefY, outerRadius).join(",")
+            
+            
+                FirstPath = "M" + newFirst + "A" + newRad + " 0 0, 1" + newLast
+                ellipseInnerArc = FirstPath + "L" + firstSmallLoc + "A" + radSmallLoc + "0 0,0" + secSmallLoc + "Z"
+
+                if (visualDonatData[i]["id_group"] != 0) {
+                    textArc = "M" + newLast + "L" + firstSmallLoc + "Z"
+                    centreSec = getCentres(newLast.split(","), newFirst.split(",")).join(",")
+                    centreSec2 = getCentres(newLast.split(","), newFirst.split(","))
+                    centreSec2[0] = centreSec2[0] + 1   
+                    centreSec2 = centreSec2.join(",")
+                    centreFirst = getCentres(firstSmallLoc.split(","), secSmallLoc.split(",")).join(",")
+                    textArcCentre = "M " + centreSec + " L" + centreFirst + " L " + centreSec2
+                } else {
+                    textArc = "M" + secSmallLoc + "L" + newFirst + "Z"
+                    centreSec = getCentres(newLast.split(","), newFirst.split(",")).join(",")
+                    centreFirst = getCentres(firstSmallLoc.split(","), secSmallLoc.split(",")).join(",")
+                    textArcCentre = "M" + centreFirst + "L" + centreSec + "Z"
+                }
+
+
+                console.log("ellipseInnerArc " + ellipseInnerArc)
+                console.log("textArcCentre " + textArcCentre)
+
+                newRadOut = [global_arc_koefX * rad[0], global_arc_koefY * rad[1]].join(",")
+                dist = getDistance(firstSmallLoc.split(","), secSmallLoc.split(","))
+                size_sec = getDistance(centreSec.split(","), centreFirst.split(","))     //size of sector
+                angle = getRotateAngle(firstSmallLoc.split(","), secSmallLoc.split(",")) //угол поворота для смещения картинки
+              
+                perc = 50 + (1 - dist / size_sec) * 50 //(size_sec - dist) * 1.0/ size_sec * 50 + 50
+
+                //если текущий кусок самый крайний в группе
+                cur_group = visualDonatData[i]["id_group"]
+                if (cur_group != -1) {
+                    if (part_bounces[cur_group][0] == i) {
+                        var a = Object.assign({}, arcOut)
+                        a["firstLoc"] = newFirstOut
+                        a["radLoc"] = newRadOut
+                        a["firstSmallLoc"] = newFirst
+                        a["radSmallLoc"] = newRad
+                        out_arcs.push(a)
+                    }
+                    if (part_bounces[cur_group][1] == i) {
+                        out_arcs[cur_group]["secLoc"] = newSecOut
+                        out_arcs[cur_group]["secSmallLoc"] = newLast
+                    }
+                }
+                //"M -94 179 L -68 130  L 10 25 L -94 179"
+                
+
+                svg.append("path")
+                    .attr("class", "hiddenvisualDonatArcs")
+                    .attr("id", "visualDonatArc" + i)
+                    .attr("d", textArc)
+                    .style("fill", visualDonatData[i]["color"]);
+                
+                //Маленькие внутринние дольки
+                
+                svg.append("path")
+                    .attr("class", "slice_ellipse")
+                    .attr("id", "ArcEllipse" + i)
+                    .attr("d", ellipseInnerArc)
+                    .style("fill", visualDonatData[i]["color"])
+                    .on("mouseover", function () {
+                        restore_colors()
+                        d3.select(this).style("fill", "#debcd1");
+                        setClicked(click_events[i]);
+                       
+                    })
+                    .on("mouseout", function (d, i) {
+                        restore_colors()
+                        //d3.select(this).style("fill", visualDonatData[i]["color"]);
+                    });
+
+                svg.append("path")
+                    .attr("class", "hiddenvisualDonatArcsCentre")
+                    .attr("id", "visualDonatArcCentre" + i)
+                    .attr("stroke-width", 10)
+                    .attr("d", textArcCentre)
+                    .style("fill", "black"); 
+
+            });
+      
+    </script>
+
+    
+   <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+   <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+    
+    
+
+
+
+<script>
+     var  myDiv2 = document.getElementById("my-icon-select");
+        myDiv2.id = "myDiv2";  
+    //Create and append select list
+      var selectList = document.createElement("select");
+      selectList.id = "mySelect";
+      selectList.style.width =  wd + "px";    
+      selectList.style.fontSize = fontSizeInnerSlice * 1.5
+    
+      myDiv2.appendChild(selectList);
+
+     //Create and append the options
+     for (var i = 0; i < tournaments.length; i++) {
+         var option = document.createElement("option");
+         option.value = tournaments[i]['value'];
+         option.text = tournaments[i]['text'];
+         img = "{{ url_for('static', filename= 'png/wc_icons/') }}" + option.value + ".png";
+         option.style = img;
+         selectList.appendChild(option);
+     }
+      selectList.selectedIndex = {{tournamentPos}}            
+              
+      $('#mySelect').change(function () {
+          var optionSelected = document.getElementById('mySelect');
+          getTournament(optionSelected.value)
+
+    
+ });        
+</script>
+
+</body>
+
+</html>
+
+
