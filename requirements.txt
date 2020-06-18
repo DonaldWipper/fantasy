@@ -4,5 +4,6 @@ requests==2.18.4
 robobrowser==0.5.3
 Flask
 Werkzeug==0.16.1
+gunicorn==20.0.4
 
 
