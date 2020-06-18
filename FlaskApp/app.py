@@ -1,10 +1,29 @@
 from flask import Flask, render_template, make_response
 from flask import request, flash
+import os
+import logging
+import sys
 
 try:
     import FlaskApp.sport_fantasy as sport_fantasy
 except:
     import sport_fantasy as sport_fantasy
+
+print(os.curdir())
+
+
+
+
+
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logging.basicConfig(stream=sys.stderr, level=logging.ERROR)
+logging.captureWarnings(True)
+
+
+files = [f for f in os.listdir('.') if os.path.isfile(f)]
+for f in files:
+    logging.info(f)
+# do something
 
 
 app = Flask(__name__)
