@@ -1,3 +1,7 @@
+
+import werkzeug
+werkzeug.cached_property = werkzeug.utils.cached_property
+
 from flask import Flask, render_template, make_response
 from flask import request, flash
 import os
@@ -8,8 +12,6 @@ try:
     import FlaskApp.sport_fantasy as sport_fantasy
 except:
     import sport_fantasy as sport_fantasy
-
-
 
 
 
