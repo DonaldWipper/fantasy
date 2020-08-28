@@ -14,7 +14,7 @@
       "премьер-лига Россия": {
         "team_id": 2224177,
         "tournament_id": 31,
-        "season_id": 7371,
+        "season_id": 8071,
         "number_subs": 3,
         "max_player_one_team": 2
       },
@@ -47,9 +47,9 @@
         "max_player_one_team": 2
       },  
       "лига 1 Франция": {
-        "team_id": 2194812,
+        "team_id": 2224177,
         "tournament_id": 51,
-        "season_id": 7383,
+        "season_id": 8053,
         "number_subs": 3,
         "max_player_one_team": 2
       }, 
