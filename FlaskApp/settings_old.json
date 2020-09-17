@@ -5,7 +5,7 @@
     "password": "f9c0951393",
     "tournaments": {
       "премьер-лига Англия": {
-        "team_id": 2241460,
+        "team_id": 2150635,
         "tournament_id": 52,
         "season_id": 7380,
         "number_subs": 3,
@@ -28,21 +28,21 @@
       "бундеслига Германия": {
         "team_id": 2246182,
         "tournament_id": 50,
-        "season_id": 8078,
+        "season_id": 7390,
         "number_subs": 3,
         "max_player_one_team": 2
       },
       "Ла Лига": {
-        "team_id": 2241461,
+        "team_id": 2194809,
         "tournament_id": 49,
-        "season_id": 8153,
+        "season_id": 7393,
         "number_subs": 3,
         "max_player_one_team": 2
       },  
       "серия А Италия": {
-        "team_id": 2255583,
+        "team_id": 2194811,
         "tournament_id": 48,
-        "season_id": 8155,
+        "season_id": 7471,
         "number_subs": 3,
         "max_player_one_team": 2
       },  
@@ -61,23 +61,23 @@
         "max_player_one_team": 2
       },   
      "чемпионшип": {
-        "team_id": 2241463,
+        "team_id": 2194814,
         "tournament_id": 205,
         "season_id": 7381,
         "number_subs": 3,
         "max_player_one_team": 2
       },   
       "высшая лига Португалия": {
-        "team_id": 2255590,
+        "team_id": 2194815,
         "tournament_id": 207,
-        "season_id": 8151,
+        "season_id": 7397,
         "number_subs": 3,
         "max_player_one_team": 2
       }, 
       "высшая лига Турция": {
-        "team_id": 2246185,
+        "team_id": 2194816,
         "tournament_id": 246,
-        "season_id": 8146,
+        "season_id": 7465,
         "number_subs": 3,
         "max_player_one_team": 2
       },   
@@ -97,6 +97,13 @@
       }
     }
   },
+  "gitlab":{ 
+      "user":"DonaldWipper",
+      "password":"u1t2y3a4++++",
+      "fantasy":{ 
+         "project":"fantasy.git"
+      }
+   },
   "sport_api": {
     "url_team_info":"https://www.sports.ru/fantasy/football/team/%d.html",
     "url_points_tour":"https://www.sports.ru/fantasy/football/team/points/%d/%d.json",
