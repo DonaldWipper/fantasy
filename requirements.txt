@@ -1,6 +1,7 @@
 numpy==1.18.1
 pandas==1.0.5
 requests==2.18.4
+cubes==1.1
 robobrowser==0.5.3
 Flask
 Werkzeug==0.16.1
