@@ -4,9 +4,15 @@ import re
 import datetime
 import json
 import pandas as pd
-from SQLWorker import SQLWorker
 from environs import Env
-from sport_api import SportsApiMethods
+
+
+try:
+    from FlaskApp.SQLWorker import SQLWorker
+    from FlaskApp.sport_api import SportsApiMethods
+except:
+    from SQLWorker import SQLWorker
+    from sport_api import SportsApiMethods
 
 
 def read_params(fn):
@@ -18,9 +24,6 @@ def read_params(fn):
         print("Error. Can't find file " + fn)
         d = {}
     return d
-
-
-
 
 
 def get_numbers(inputString):
@@ -67,7 +70,7 @@ class ParserClass:
         tours_stats = tours_stats.where(pd.notnull(tours_stats), None)
         tours_stats["team_id"] = team_id
         self.sql_worker.insert_duplicate_df(tours_stats, table_name=players_stat)
-        return 'OK'
+        return "OK"
 
     def save_deadlines_data(self):
         deadlines_table = self.settings["sql"]["deadlines"]
