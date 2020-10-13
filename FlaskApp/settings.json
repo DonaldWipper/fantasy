@@ -19,9 +19,9 @@
         "max_player_one_team": 2
       },
       "Лига чемпионов УЕФА": {
-        "team_id": 2179415,
+        "team_id": 2263196,
         "tournament_id": 57,
-        "season_id": 6855,
+        "season_id": 8103,
         "number_subs": 3,
         "max_player_one_team": 2
       },
@@ -97,13 +97,17 @@
       }
     }
   },
+  "sql": {
+    "deadlines": "deadlines_fantasy_stat",
+    "players_stat": "players_fantasy_stat"
+  },
   "sport_api": {
     "url_team_info":"https://www.sports.ru/fantasy/football/team/%d.html",
     "url_points_tour":"https://www.sports.ru/fantasy/football/team/points/%d/%d.json",
     "url_save": "https://www.sports.ru/fantasy/football/team/json/save/%d.json",
     "url_get": "https://www.sports.ru/fantasy/football/team/json/%d.json",
     "url_fantasy_menu": "https://www.sports.ru/api/user_fantasy_menu.json",  
-    "url_fantasy": "https://www.sports.ru/fantasy",  
+    "url_fantasy": "https://www.sports.ru/fantasy/",
     "url_tournaments": "https://www.sports.ru/fantasy/football/team/create/%d.json",
     "url_tournament_info": "https://www.sports.ru/stat/export/iphone/tournament_info.json",
     "url_tournament_calendar": "https://www.sports.ru/stat/export/iphone/tournament_calendar.json",
@@ -114,6 +118,7 @@
     "url_team_players": "https://www.sports.ru/stat/export/iphone/teamplayers.json",
     "url_team_stat_players": "https://www.sports.ru/stat/export/iphone/team_stat.json",
     "url_tournament_all": "https://www.sports.ru/stat/export/iphone/all_tournaments.json",
+    "url_tag_info":"https,://www.sports.ru/stat/export/iphone/taginfo.json?tag={}",
     "url_seasons": "https://www.sports.ru/stat/export/iphone/tournament_stat_seasons.json"
   },
   "headers": {

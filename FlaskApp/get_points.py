@@ -1,7 +1,6 @@
 from sport_api import SportsApiMethods
 import json
 
-
 def read_params(fn):
     d = {}
     try:
@@ -12,7 +11,6 @@ def read_params(fn):
         d = {}
     return d
 
-
 try:
     settings = read_params("FlaskApp/settings.json")
     sports = SportsApiMethods(settings)
@@ -20,4 +18,6 @@ except:
     settings = read_params("settings.json")
     sports = SportsApiMethods(settings)
 
-print(sports.getStatSeasonsById(57))
+print(settings["fantasy_settings"]["tournaments"])
+#team_id = settings["fantasy_settings"]["tournaments"][key]["team_id"]
+#tours_stats = sports.getMyTeamInfoAllTours(team_id = team_id).reset_index()
