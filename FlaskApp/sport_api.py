@@ -11,10 +11,11 @@ except:
 
 # import  parse_class as pc
 
-class SportsApiMethods():
+
+class SportsApiMethods:
     def __init__(self, _settings=None, _url_login=None, _login=None, _password=None):
         self.settings = _settings["sport_api"]
-        self.headers = _settings['headers']
+        self.headers = _settings["headers"]
         self.url_login = _url_login
         self.login = _login
         self.parser = pc.MyHTMLParser(False)
@@ -24,84 +25,93 @@ class SportsApiMethods():
     def setConnection(self):
         self.session = requests.Session()
         self.session.headers = self.headers
-        '''
+        """
         browser = RoboBrowser(history=True)
         browser.open(self.url_login)
         form = browser.get_forms()[1]
         form['login'].value = self.login 
         form['password'].value = self.password
         browser.submit_form(form)
-        '''
+        """
 
     def getFantasyInfo(self, tournament=None):
         session = requests.Session()
-        resp = session.get(self.settings['url_fantasy_menu'], headers=self.headers)
-        df = pd.DataFrame(data=resp.json()['data']['items'])
+        resp = session.get(self.settings["url_fantasy_menu"], headers=self.headers)
+        df = pd.DataFrame(data=resp.json()["data"]["items"])
         return df
 
     def getMainFantasyPage(self):
         session = requests.Session()
-        print(self.settings['url_fantasy'])
+        print(self.settings["url_fantasy"])
         resp = session.get(self.settings["url_fantasy"], headers=self.headers)
         return resp
 
-    def getAllTournament(self, category_id=None, key_name=None):
-        if category_id != None:
-            prefix = '?category_id=%d' % category_id
+    def get_all_tournaments(self, category_id=None, key_name=None):
+        if category_id is not None:
+            prefix = "?category_id=%d" % category_id
         else:
-            prefix = ''
-        resp = requests.get(self.settings['url_tournament_all'] + prefix)
+            prefix = ""
+        resp = requests.get(self.settings["url_tournament_all"] + prefix)
         df = pd.DataFrame(data=resp.json())
-        if (key_name != None):
+        if key_name is not None:
             df = df[df["name"].str.contains(key_name)]
         return df
 
     def getStatSeasonsById(self, tournament, season=None):
-        resp = requests.get(self.settings['url_seasons'] + '?tournament=%d' % tournament)
+        resp = requests.get(
+            self.settings["url_seasons"] + "?tournament=%d" % tournament
+        )
         df = pd.DataFrame(data=resp.json())
-        if (season != None):
+        if season != None:
             df = df[df["name"].str.contains(season)]
         return df
 
     def geSeasonsIdByKeyNameAndSeason(self, key_name, season):
-        tournament = self.getAllTournament(key_name=key_name).head(1)["id"]
-        season = self.getStatSeasonsById(tournament, season).any['id']
+        tournament = self.get_all_tournaments(key_name=key_name).head(1)["id"]
+        season = self.getStatSeasonsById(tournament, season).any["id"]
         return season
 
     def getPlayerInfo(self, tag):
-        resp = requests.get(self.settings['url_player_info'] + '?tag=%d' % (tag))
-        print(self.settings['url_player_info'] + '?tag=%d' % (tag))
+        resp = requests.get(self.settings["url_player_info"] + "?tag=%d" % (tag))
+        print(self.settings["url_player_info"] + "?tag=%d" % (tag))
         return resp.json()
 
     def getTourInfoById(self, tournament_id):
-        resp = requests.get(self.settings['url_tournament_info'] + '?&tournament=%d' % tournament_id)
+        resp = requests.get(
+            self.settings["url_tournament_info"] + "?&tournament=%d" % tournament_id
+        )
         return resp.json()
 
     def getPlayerStat(self, tag, season_id=None, tournament_id=None):
         if (season_id == None) and (tournament_id == None):
-            url = self.settings['url_player_stat'] + '?tag=%d' % tag
+            url = self.settings["url_player_stat"] + "?tag=%d" % tag
         else:
-            url = self.settings['url_player_stat'] + '?tag=%d&season_id=%d&tournament_id=%d' % (
-            tag, season_id, tournament_id)
+            url = self.settings[
+                "url_player_stat"
+            ] + "?tag=%d&season_id=%d&tournament_id=%d" % (
+                tag,
+                season_id,
+                tournament_id,
+            )
         resp = requests.get(url)
         # df = pd.DataFrame(data =  resp.json())
         return json.loads(resp.text)
 
     def getPlayerStatSeason(self, tag, season_id=None, tournament_id=None):
         resp = self.getPlayerStat(tag, season_id, tournament_id)
-        data = resp['all_stat']
-        data['tag_id'] = tag
+        data = resp["all_stat"]
+        data["tag_id"] = tag
         return data
 
     def getMyTeamInfo(self, team_id):
         session = self.session
-        url = self.settings['url_get'] % team_id
+        url = self.settings["url_get"] % team_id
         print(url)
-        resp = session.get(self.settings['url_get'] % team_id)
-        if 'players' in resp.json():
-            res = resp.json()['players']
+        resp = session.get(self.settings["url_get"] % team_id)
+        if "players" in resp.json():
+            res = resp.json()["players"]
         elif resp.status_code != 200:
-            res = [{'error': 'cockie was expired'}]
+            res = [{"error": "cockie was expired"}]
         else:
             res = [resp.json()]
 
@@ -109,17 +119,17 @@ class SportsApiMethods():
 
     def getAllTeamInfo(self, tournament_id):
         session = self.session
-        url = self.settings['url_tournaments'] % tournament_id
-        print('get tournament players from url %s' % url)
+        url = self.settings["url_tournaments"] % tournament_id
+        print("get tournament players from url %s" % url)
         resp = session.get(url, headers=self.headers)
-        res = resp.json()['players']
+        res = resp.json()["players"]
         df = pd.DataFrame(data=res)
-        df.set_index('id')
+        df.set_index("id")
         return df
 
     def getMyTeamInfoAllTours(self, team_id):
         session = self.session
-        url = self.settings['url_team_info'] % team_id
+        url = self.settings["url_team_info"] % team_id
         # print(url)
         txt = requests.get(url).text
         #  "https://www.sports.ru/fantasy/football/team/%d.html",
@@ -130,26 +140,23 @@ class SportsApiMethods():
         team_history = []
         # print(parser.tours)
         for tour in parser.tours:
-            url = self.settings['url_points_tour'] % (team_id, parser.tours[tour])
+            url = self.settings["url_points_tour"] % (team_id, parser.tours[tour])
             # print(url)
             resp = session.get(url, headers=self.headers)
-            if 'players' in resp.json():
-                res = resp.json()['players']
+            if "players" in resp.json():
+                res = resp.json()["players"]
                 for r in res:
                     r["tour"] = tour
                     # res = [resp.json()]
                 team_history = team_history + res
-            elif resp.status_code != 200 and 'team' not in resp.json():
-                res = [{'error': 'cockie was expired'}]
+            elif resp.status_code != 200 and "team" not in resp.json():
+                res = [{"error": "cockie was expired"}]
 
         return pd.DataFrame(data=team_history)
 
     def getTeamsTournament(self, season_id, tournament_id, month=None):
-        params = {"tournament": tournament_id,
-                  "season_id": season_id,
-                  "month": month
-                  }
-        url = self.settings['url_tournament_calendar']
+        params = {"tournament": tournament_id, "season_id": season_id, "month": month}
+        url = self.settings["url_tournament_calendar"]
         # print(url + '?tornament=%s&season_id=%s '% (str(tournament_id), str(season_id) )
         resp = requests.get(url, params=params)
         tag_ids = []
@@ -161,13 +168,13 @@ class SportsApiMethods():
         return list(set(tag_ids))
 
     def getTeamPlayers(self, tag):
-        url = self.settings['url_team_stat_players'] + '?tag=%d' % (tag)
+        url = self.settings["url_team_stat_players"] + "?tag=%d" % (tag)
         print(url)
         resp = requests.get(url)
         return json.loads(resp.text)["players"]
 
     def getTeamPlayers2(self, tag):
-        url = self.settings['url_team_players'] + '?tag=%d' % (tag)
+        url = self.settings["url_team_players"] + "?tag=%d" % (tag)
         print(url)
         resp = requests.get(url)
         return json.loads(resp.text)
@@ -196,24 +203,26 @@ class SportsApiMethods():
                     print("error of loading players")
 
             for p in pl:
-                if p['id'] in list_ids:
-                    players[p['id']] = p['tag_id']
+                if p["id"] in list_ids:
+                    players[p["id"]] = p["tag_id"]
             for p in pl2:
-                if p['player_id'] in list_ids and p['player_id'] not in players:
-                    players[p['player_id']] = p['tag_id']
+                if p["player_id"] in list_ids and p["player_id"] not in players:
+                    players[p["player_id"]] = p["tag_id"]
         return players
 
     def sendTransfers(self, transfers, team_id):
         session = requests.Session()
-        resp = session.post(self.settings['url_save'] % team_id, data=transfers, headers=self.headers)
+        resp = session.post(
+            self.settings["url_save"] % team_id, data=transfers, headers=self.headers
+        )
 
         if resp.status_code != 200:
             try:
-                print('team %d send %s' % (team_id, str(resp.json())))
+                print("team %d send %s" % (team_id, str(resp.json())))
                 return resp.json()
             except:
-                print('team %d send %s' % (team_id, resp.text))
+                print("team %d send %s" % (team_id, resp.text))
                 return resp.text
         else:
-            print('team %d send %s' % (team_id, resp.text))
-            return {'status': 'OK'}
+            print("team %d send %s" % (team_id, resp.text))
+            return {"status": "OK"}

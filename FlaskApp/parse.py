@@ -6,7 +6,6 @@ import json
 import pandas as pd
 from environs import Env
 
-
 try:
     from FlaskApp.SQLWorker import SQLWorker
     from FlaskApp.sport_api import SportsApiMethods
@@ -70,6 +69,12 @@ class ParserClass:
         tours_stats = tours_stats.where(pd.notnull(tours_stats), None)
         tours_stats["team_id"] = team_id
         self.sql_worker.insert_duplicate_df(tours_stats, table_name=players_stat)
+        return "OK"
+
+    def get_tournaments(self):
+        tournaments = self.settings["sql"]["tournaments"]
+        all_tournaments_ = self.sports.get_all_tournaments()
+        self.sql_worker.insert_duplicate_df(all_tournaments_, table_name=tournaments)
         return "OK"
 
     def save_deadlines_data(self):
@@ -149,7 +154,10 @@ class ParserClass:
 
 
 def run():
+
     parser = ParserClass()
+    print("load tournaments")
+    parser.get_tournaments()
     print("load deadlines")
     parser.save_deadlines_data()
     print("load players stat")

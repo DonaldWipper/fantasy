@@ -2,20 +2,40 @@
 
 <head>
     <meta charset="utf-8">
+    <title>fantasy-automaton-system</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
         <!-- Month names -->
 
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='png/fantasy.jpeg') }}"  sizes="32x32">
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='png/fantasy.jpeg') }}" sizes="194x194">
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='png/fantasy.jpeg') }}"  sizes="96x96">
+    <link rel="shortcut icon" href="img/favicon/favicon.ico">
+
+
+    <link rel="stylesheet" href="{{url_for('static', filename='lib/angular-ui-grid/ui-grid.css') }}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='lib/font-awesome/css/font-awesome.css') }}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='lib/nvd3/nv.d3.css') }}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='dist/cubesviewer.css') }}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='lib/bootstrap-submenu/css/bootstrap-submenu.css') }}" />
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/cvapp.css') }}" />
+
+    <script src="{{url_for('static', filename='lib/jquery/jquery.js') }}"></script>
+    <script src="{{url_for('static', filename='lib/bootstrap/bootstrap.js') }}"></script>
+    <script src="{{url_for('static', filename='lib/bootstrap-submenu/js/bootstrap-submenu.js') }}"></script>
+    <script src="{{url_for('static', filename='lib/angular/angular.js') }}"></script>
+    <script src="{{url_for('static', filename='lib/angular-cookies/angular-cookies.js') }}"></script>
+    <script src="{{url_for('static', filename='lib/angular-bootstrap/ui-bootstrap-tpls.js') }}"></script>
+    <script src="{{url_for('static', filename='lib/angular-ui-grid/ui-grid.js') }}"></script>
+    <script src="{{url_for('static', filename='lib/d3/d3.js') }}"></script>
+    <script src="{{url_for('static', filename='lib/nvd3/nv.d3.js') }}"></script>
+    <script src="{{url_for('static', filename='lib/flotr2/flotr2.min.js') }}"></script>
+    <script src="{{url_for('static', filename='lib/masonry/masonry.pkgd.min.js') }}"></script>
+    <script src="{{url_for('static', filename='dist/cubesviewer.js') }}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 </head>
-<script type="text/javascript">
-      var onloadCallback = function() {
-        grecaptcha.render('html_element', {
-           'size': 'invisible',
-           'isolated': !0,
-           'sitekey' : '6LfctWkUAAAAAA0IBo4Q7wlWetU0jcVC7v5BXbFT'
-        });
-      };
-    </script>
+
     
 <body>
     <h1 style="text-align:center;font-family:dusha"> FANTASY AUTOMATION SYSTEM</h1>
@@ -61,102 +81,75 @@
     </table>
     
     <h2 style="text-align:center;font-family:dusha">Статистика набранных очков</h2>
-    <td> <a href="update_statistics" class="button5" style="background-color:yellow;">Обновить статистику</a> </td>
-    <div class="row">
-        {% for d in res2 %}
-        <div class="column">
-            <img src="/static/png/{{d["tournament"]}}.png" style="width:100%" onclick="openModal();currentSlide({{loop.index}})" class="hover-shadow cursor">
-        </div>
-        {% endfor %}
 
-        <div id="myModal" class="modal">
-            <span class="close cursor" onclick="closeModal()">&times;</span>
-            <div class="modal-content">
-                {% for d in res2 %}
 
-                <div class="mySlides">
-                    <div class="numbertext"> {{loop.index}} / {{ res2|length }}</div>
-                    <img src="/static/png/{{d["tournament"]}}.png" style="width:100%">
-                </div>
-                {% endfor %}
+    <div style="clear: both;"></div>
 
-                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                <a class="next" onclick="plusSlides(1)">&#10095;</a>
 
-                <div class="caption-container">
-                    <p id="caption"></p>
-                </div>
-                {% for d in res2 %} 
-                <div class="column">
-                    <img class="demo cursor" src="/static/png/{{d["tournament"]}}.png" style="width:100%" onclick="currentSlide({{loop.index}})" alt="{{d["tournament"]}}">
-                </div>
-                {% endfor %}
+    <!-- Cubes Viewer container -->
+    <div id="cubesviewer">
+    </div>
 
-            </div>
-        </div>
-        
-<form>
-      <div id="html_element"></div>
-      <br>
-      <input type="submit" value="Submit" onclick="changeValue(this.id)">
-</form>
-        
+
+    <div class="footer" style="clear: both; padding-top: 20px;">
+        <div style="height: 1px; border-top: 1px solid #DDDDDD; padding-top: 4px;"></div>
+
+    </div>
 </body>
     
     
     
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-    async defer>
-</script>
 
-<script>
-    function changeValue(id) {
-        var el       = document.getElementById(id);
-        //el.value     = grecaptcha.getResponse("html_element");  // change the value passed to the next page
-        el.innerHTML = grecaptcha.getResponse("html_element");  // change the displayed text on the screen
-    return false;
-    }
-    
-    function openModal() {
-        document.getElementById("myModal").style.display = "block";
-    }
 
-    function closeModal() {
-        document.getElementById("myModal").style.display = "none";
-    }
+<script type="text/javascript">
 
-    var slideIndex = 1;
-    showSlides(slideIndex);
+        // Initialize CubesViewer when document is ready
+        $(document).ready(function() {
 
-    function plusSlides(n) {
-        showSlides(slideIndex += n);
-    }
+            var cubesUrl = "api/";
+            //var cubesUrl = "http://localhost:5000";
 
-    function currentSlide(n) {
-        showSlides(slideIndex = n);
-    }
+            cubesviewerStudio.init({
+                cubesUrl: cubesUrl,
+                container: $('#cubesviewer').get(0),
+                //debug: true
+            });
 
-    function showSlides(n) {
-        var i;
-        var slides = document.getElementsByClassName("mySlides");
-        var dots = document.getElementsByClassName("demo");
-        var captionText = document.getElementById("caption");
-        if (n > slides.length) {
-            slideIndex = 1
-        }
-        if (n < 1) {
-            slideIndex = slides.length
-        }
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-        }
-        for (i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-        }
-        slides[slideIndex - 1].style.display = "block";
-        dots[slideIndex - 1].className += " active";
-        captionText.innerHTML = dots[slideIndex - 1].alt;
-    }
+            var first = {
+                "charttype": "lines",
+                "chartoptions": {
+                    "showLegend": true,
+                    "lineInterpolation": "monotone"
+                },
+                "mode": "chart",
+                "drilldown": [
+                    "tournament_name"
+                ],
+                "cuts": [],
+                "datefilters": [],
+                "columnHide": {},
+                "columnWidths": {},
+                "columnSort": {},
+                "cubename": "players_fantasy_stat",
+                "name": "Статистика очков",
+                "yaxis": "points_sum",
+                "xaxis": "tour"
+            }
+
+            cubesviewer.apply(function() {
+                var serialized0 = JSON.stringify(first);
+                var view0 = cubesviewerStudio.studioViewsService.addViewObject(serialized0);
+                //cubesviewerStudio.studioViewsService.studioScope.toggleTwoColumn();
+                //cubesviewerStudio.studioViewsService.studioScope.toggleHideControls();
+
+            });
+
+
+
+        });
+
+
+
 </script>
 
 </html>

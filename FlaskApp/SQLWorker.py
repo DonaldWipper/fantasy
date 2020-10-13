@@ -20,9 +20,10 @@ class SQLWorker:
         self.meta = MetaData(bind=self.engine)
         self.meta.reflect()
         table_sql = self.meta.tables[table_name]
-        data = df.to_dict(orient="records")
-        stmt = Insert(table_sql).values(data)
         columns = [c.name for c in table_sql.columns if c.name in list(df.columns)]
+        df = df.where(pd.notnull(df), None)
+        data = df[columns].to_dict(orient="records")
+        stmt = Insert(table_sql).values(data)
         update_dic = {}
         for c in columns:
             update_dic[c] = stmt.inserted[c]

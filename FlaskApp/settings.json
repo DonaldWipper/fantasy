@@ -99,6 +99,7 @@
   },
   "sql": {
     "deadlines": "deadlines_fantasy_stat",
+    "tournaments": "fantasy_tournaments",
     "players_stat": "players_fantasy_stat"
   },
   "sport_api": {

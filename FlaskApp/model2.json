@@ -1,0 +1,189 @@
+[
+  {
+    "dimensions": [
+      {
+        "name": "club_id",
+        "label": "club_id"
+      },
+      {
+        "name": "team_id",
+        "label": "team_id"
+      },
+      {
+        "name": "club",
+        "label": "club"
+      },
+      {
+        "name": "amplua",
+        "label": "amplua"
+      },
+      {
+        "name": "now_id",
+        "label": "now_id"
+      },
+      {
+        "name": "tour",
+        "label": "tour"
+      },
+      {
+        "name": "tournament_name",
+        "label": "tournament_name"
+      },
+      {
+        "comment": "This is used as a template for other date dimensions.",
+        "name": "date",
+        "label": "День баланса",
+        "role": "time",
+        "levels": [
+          {
+            "name": "year",
+            "label": "Year",
+            "role": "year",
+            "attributes": [
+              {
+                "name": "year",
+                "order": "asc"
+              }
+            ]
+          },
+          {
+            "name": "month",
+            "label": "Month",
+            "role": "month",
+            "attributes": [
+              {
+                "name": "month",
+                "order": "asc"
+              }
+            ]
+          },
+          {
+            "name": "week",
+            "label": "Week",
+            "role": "week",
+            "attributes": [
+              {
+                "name": "week",
+                "order": "asc"
+              }
+            ]
+          },
+          {
+            "name": "day",
+            "label": "Day",
+            "role": "day",
+            "attributes": [
+              {
+                "name": "day"
+              }
+            ]
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "by_date",
+            "label": "Daily",
+            "levels": [
+              "year",
+              "month",
+              "day"
+            ]
+          },
+          {
+            "name": "weekly",
+            "label": "Weekly",
+            "levels": [
+              "year",
+              "week"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "date_balance",
+        "label": "группировка даты",
+        "role": "time",
+        "template": "date"
+      }
+    ],
+    "cubes": [
+      {
+        "name": "players_fantasy_stat",
+        "dimensions": [
+          "club_id",
+          "team_id",
+          "club",
+          "amplua",
+          "now_id",
+          "tour"
+        ],
+        "measures": [
+          {
+            "name": "min",
+            "label": "min"
+          },
+          {
+            "name": "goals",
+            "label": "goals"
+          },
+          {
+            "name": "points",
+            "label": "points"
+          },
+          {
+            "name": "price",
+            "label": "price"
+          },
+          {
+            "name": "pass",
+            "label": "pass"
+          }
+        ],
+        "aggregates": [
+          {
+            "name": "min_sum",
+            "label": "Minutes sum",
+            "function": "sum",
+            "measure": "min"
+          },
+          {
+            "name": "goals_sum",
+            "label": "Goals sum",
+            "function": "sum",
+            "measure": "goals"
+          },
+          {
+            "name": "points_sum",
+            "label": "Points sum",
+            "function": "sum",
+            "measure": "points"
+          },
+          {
+            "name": "pass_sum",
+            "label": "Passes sum",
+            "function": "sum",
+            "measure": "pass"
+          },
+          {
+            "name": "price_sum",
+            "label": "Prices sum",
+            "function": "sum",
+            "measure": "price"
+          }
+        ],
+        "joins": [
+          {
+            "master": "players_fantasy_stat.now_id",
+            "detail": {
+              "table": "fantasy_tournaments",
+              "column": "id"
+            }
+          }
+        ],
+        "mappings": {
+          "tournament_name": "fantasy_tournaments.name"
+        }
+      }
+    ]
+  }
+]
