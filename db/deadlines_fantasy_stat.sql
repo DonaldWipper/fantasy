@@ -1,4 +1,4 @@
---f
+--test
 create table deadlines_fantasy_stat
 (
     team_id bigint not null,
