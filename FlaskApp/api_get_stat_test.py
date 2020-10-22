@@ -20,4 +20,4 @@ except:
     settings = read_params("settings.json")
     sports = SportsApiMethods(settings)
 
-print(sports.getStatSeasonsById(57))
+print(sports.getStatSeasonsById(56))
