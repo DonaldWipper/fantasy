@@ -53,6 +53,7 @@ class ParserClass:
             self.sports = SportsApiMethods(self.settings)
 
         self.headers = self.settings["headers"]
+        self.headers["Cookie"] = env.str("COOKIE")
 
     def get_tour_points(self, key):
         players_stat = self.settings["sql"]["players_stat"]
